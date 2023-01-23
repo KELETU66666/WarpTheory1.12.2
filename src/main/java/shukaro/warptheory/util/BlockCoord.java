@@ -3,6 +3,7 @@ package shukaro.warptheory.util;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -48,7 +49,7 @@ public class BlockCoord implements Comparable
 
     public BlockCoord(TileEntity tile)
     {
-        this(tile.xCoord, tile.yCoord, tile.zCoord);
+        this(tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
     }
 
     public BlockCoord(int[] array)
@@ -357,26 +358,26 @@ public class BlockCoord implements Comparable
 
     public int getMeta(World world)
     {
-        return world.getBlockMetadata(this.x, this.y, this.z);
+        return world.getBlockState(new BlockPos(this.x, this.y, this.z)).getBlock().getMetaFromState(world.getBlockState(new BlockPos(this.x, this.y, this.z)));
     }
 
     public int getMeta(IBlockAccess access)
     {
-        return access.getBlockMetadata(this.x, this.y, this.z);
+        return access.getBlockState(new BlockPos(this.x, this.y, this.z)).getBlock().getMetaFromState(access.getBlockState(new BlockPos(this.x, this.y, this.z)));
     }
 
-    public Block getBlock(World world) { return world.getBlock(this.x, this.y, this.z); }
+    public Block getBlock(World world) { return world.getBlockState(new BlockPos(this.x, this.y, this.z)).getBlock(); }
 
-    public Block getBlock(IBlockAccess access) { return access.getBlock(this.x, this.y, this.z); }
+    public Block getBlock(IBlockAccess access) { return access.getBlockState(new BlockPos(this.x, this.y, this.z)).getBlock(); }
 
     public TileEntity getTileEntity(World world)
     {
-        return world.getTileEntity(this.x, this.y, this.z);
+        return world.getTileEntity(new BlockPos(this.x, this.y, this.z));
     }
 
-    public boolean isAir(IBlockAccess access) { return access.isAirBlock(this.x, this.y, this.z); }
+    public boolean isAir(IBlockAccess access) { return access.isAirBlock(new BlockPos(this.x, this.y, this.z)); }
 
-    public ItemStack getStack(IBlockAccess access) { return new ItemStack(access.getBlock(this.x, this.y, this.z), 1, access.getBlockMetadata(this.x, this.y, this.z)); }
+    public ItemStack getStack(IBlockAccess access) { return new ItemStack(access.getBlockState(new BlockPos(this.x, this.y, this.z)).getBlock(), 1, access.getBlockState(new BlockPos(this.x, this.y, this.z)).getBlock().getMetaFromState(access.getBlockState(new BlockPos(this.x, this.y, this.z)))); }
 
     @Override
     public String toString()

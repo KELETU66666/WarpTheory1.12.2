@@ -1,12 +1,17 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.net.PacketDispatcher;
 import shukaro.warptheory.util.BlockCoord;
@@ -40,7 +45,7 @@ public class WarpBlink extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.blink"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.blink"));
         MiscHelper.modEventInt(player, "blink", 10 + world.rand.nextInt(20));
         return true;
     }
@@ -70,7 +75,7 @@ public class WarpBlink extends IWarpEvent
                         double dZ = target.z + e.world.rand.nextDouble();
                         player.setPositionAndUpdate(dX, dY, dZ);
                         PacketDispatcher.sendBlinkEvent(e.world, dX, dY, dZ);
-                        e.world.playSoundEffect(dX, dY, dZ, "mob.endermen.portal", 1.0F, 1.0F);
+                        e.world.playSound(dX, dY, dZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
                         MiscHelper.getWarpTag(player).setInteger("blink", --blink);
                         if (blink <= 0)
                             MiscHelper.getWarpTag(player).removeTag("blink");

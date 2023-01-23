@@ -1,8 +1,9 @@
 package shukaro.warptheory.net;
 
-import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
+import net.minecraftforge.fml.common.network.FMLIndexedMessageToMessageCodec;
 import shukaro.warptheory.net.packets.*;
 
 public class WarpMessageToMessageCodec extends FMLIndexedMessageToMessageCodec<IWarpPacket>

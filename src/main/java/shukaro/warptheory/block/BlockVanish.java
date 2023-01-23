@@ -1,93 +1,82 @@
 package shukaro.warptheory.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
-import shukaro.warptheory.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
 public class BlockVanish extends BlockContainer
 {
-    public IIcon icon;
-
     protected BlockVanish()
     {
-        super(Material.rock);
+        super(Material.ROCK);
         this.setBlockUnbreakable();
         this.setResistance(6000000.0F);
-        this.setStepSound(Block.soundTypeGlass);
+        this.setSoundType(SoundType.STONE);
         this.setLightLevel(0.7f);
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         this.setTickRandomly(true);
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void registerBlockIcons(IIconRegister reg)
-    {
-        this.icon = reg.registerIcon(Constants.modID.toLowerCase() + ":blank");
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public IIcon getIcon(int side, int meta)
-    {
-        return this.icon;
-    }
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z)
+    public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player)
     {
         return null;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void getSubBlocks(Item i, CreativeTabs creativeTabs, List list) { list.add(new ItemStack(i));}
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) { items.add(new ItemStack(this));}
 
     @Override
-    public void addCollisionBoxesToList(World world, int i, int j, int k, AxisAlignedBB axisalignedbb, List arraylist, Entity entity) {}
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {}
+
 
     @Override
-    public void setBlockBoundsBasedOnState(IBlockAccess iblockaccess, int i, int j, int k)
-    {
-        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Override
-    public AxisAlignedBB getSelectedBoundingBoxFromPool(World w, int i, int j, int k)
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos)
     {
-        return AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+        return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
+    }
+
+    @Deprecated
+    public EnumBlockRenderType getRenderType(IBlockState state)
+    {
+        return EnumBlockRenderType.INVISIBLE;
     }
 
     @Override
-    public boolean renderAsNormalBlock() { return false; }
+    public boolean isOpaqueCube(IBlockState state) { return false; }
 
     @Override
-    public boolean isOpaqueCube() { return false; }
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) { return Item.getItemById(0); }
 
     @Override
-    public Item getItemDropped(int par1, Random par2Random, int par3) { return Item.getItemById(0); }
-
-    @Override
-    public boolean isSideSolid(IBlockAccess world, int i, int j, int k, ForgeDirection o)
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side)
     {
         return false;
     }

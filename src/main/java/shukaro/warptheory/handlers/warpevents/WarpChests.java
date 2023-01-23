@@ -1,15 +1,20 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.FormatCodes;
@@ -42,7 +47,7 @@ public class WarpChests extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.chests"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.chests"));
         MiscHelper.modEventInt(player, "chests", 15 + world.rand.nextInt(30));
         return true;
     }
@@ -71,9 +76,9 @@ public class WarpChests extends IWarpEvent
                 if (e.world.rand.nextInt(10) == 0)
                 {
                     if (e.world.rand.nextBoolean())
-                        e.world.playSoundEffect((double)inv1.xCoord, (double)inv1.yCoord + 0.5D, (double)inv1.zCoord, "random.chestopen", 0.5F, e.world.rand.nextFloat() * 0.1F + 0.9F);
+                        e.world.playSound((double)inv1.getPos().getX(), (double)inv1.getPos().getY() + 0.5D, (double)inv1.getPos().getZ(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, e.world.rand.nextFloat() * 0.1F + 0.9F, false);
                     else
-                        e.world.playSoundEffect((double)inv2.xCoord, (double)inv2.yCoord + 0.5D, (double)inv2.zCoord, "random.chestclosed", 0.5F, e.world.rand.nextFloat() * 0.1F + 0.9F);
+                        e.world.playSound((double)inv2.getPos().getX(), (double)inv2.getPos().getY() + 0.5D, (double)inv2.getPos().getZ(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.BLOCKS, 0.5F, e.world.rand.nextFloat() * 0.1F + 0.9F, false);
                     MiscHelper.getWarpTag(player).setInteger("chests", --chests);
                 }
                 if (!shuffle(e.world.rand, inv1, inv2))

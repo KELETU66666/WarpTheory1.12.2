@@ -1,22 +1,16 @@
 [
-{
-  "modid": "WarpTheory",
-  "name": "WarpTheory",
-  "description": "",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authors": [
-    "Shukaro", "thegreatunclean"
-  ],
-  "credits": "All the contributors",
-  "logoFile": "",
-  "screenshots": [
-  ],
-  "parent": "",
-  "dependencies": [
-    "MinecraftForge","Thaumcraft"
-  ]
-}
+  {
+    "modid": "warptheory",
+    "name": "WarpTheory1.12",
+    "description": "",
+    "version": "0.0.1",
+    "mcversion": "1.12.2",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Shukaro", "thegreatunclean", "KELETU66666"],
+    "credits": "All the contributors",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": ["MinecraftForge","Thaumcraft"]
+  }
 ]

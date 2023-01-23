@@ -1,10 +1,8 @@
 package shukaro.warptheory.handlers;
 
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.common.config.Configuration;
-import shukaro.warptheory.recipe.WarpRecipes;
-import shukaro.warptheory.research.WarpResearch;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import shukaro.warptheory.util.Constants;
 
 import java.io.File;
@@ -142,7 +140,7 @@ public class ConfigHandler {
 
     @SubscribeEvent
     public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (event.modID.equalsIgnoreCase(Constants.modID)) {
+        if (event.getModID().equalsIgnoreCase(Constants.modID)) {
             loadConfiguration();
         }
     }

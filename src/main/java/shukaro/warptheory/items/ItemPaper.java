@@ -1,29 +1,38 @@
 package shukaro.warptheory.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import shukaro.warptheory.WarpTheory;
-import shukaro.warptheory.handlers.WarpHandler;
 import shukaro.warptheory.util.Constants;
 import shukaro.warptheory.util.FormatCodes;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.ShapedArcaneRecipe;
+import thaumcraft.api.items.ItemsTC;
 
 import java.util.List;
-import java.util.Locale;
+
+import static shukaro.warptheory.handlers.WarpHandler.getIndividualWarps;
+import static shukaro.warptheory.items.WarpItems.itemPaper;
 
 public class ItemPaper extends Item
 {
-    private IIcon icon;
-
     public ItemPaper()
     {
         super();
@@ -32,6 +41,8 @@ public class ItemPaper extends Item
         this.setMaxDamage(0);
         this.setCreativeTab(WarpTheory.mainTab);
         this.setUnlocalizedName(Constants.ITEM_LITMUS);
+        this.setRegistryName("item_warppaper");
+        this.setCreativeTab(WarpTheory.mainTab);
     }
 
     @Override
@@ -42,71 +53,42 @@ public class ItemPaper extends Item
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item id, CreativeTabs tab, List list)
-    {
-        list.add(new ItemStack(id, 1, 0));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg)
-    {
-        this.icon = reg.registerIcon(Constants.modID.toLowerCase(Locale.ENGLISH) + ":" + "itemPaper");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public EnumRarity getRarity(ItemStack stack)
     {
-        return EnumRarity.uncommon;
+        return EnumRarity.UNCOMMON;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int meta)
-    {
-        return this.icon;
-    }
-
-    @Override
-    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-    {
-        return this.icon;
-    }
-
-    @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
-    {
-        if (!world.isRemote)
-        {
-            int totalWarp = WarpHandler.getTotalWarp(player);
-            int[] individualWarps = WarpHandler.getIndividualWarps(player);
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
+        if (!world.isRemote) {
+            ItemStack item = player.getHeldItem(handIn);
+            int totalWarp = ThaumcraftApi.internalMethods.getActualWarp(player);
+            int[] individualWarps = getIndividualWarps(player);
             String severity;
             if (totalWarp <= 10)
-                severity = StatCollector.translateToLocal("chat.warptheory.minorwarp");
+                severity = I18n.translateToLocal("chat.warptheory.minorwarp");
             else if (totalWarp <= 25)
-                severity = StatCollector.translateToLocal("chat.warptheory.averagewarp");
+                severity = I18n.translateToLocal("chat.warptheory.averagewarp");
             else if (totalWarp <= 50)
-                severity = StatCollector.translateToLocal("chat.warptheory.majorwarp");
+                severity = I18n.translateToLocal("chat.warptheory.majorwarp");
             else
-                severity = StatCollector.translateToLocal("chat.warptheory.deadlywarp");
-            player.addChatMessage(new ChatComponentText(FormatCodes.Purple.code + FormatCodes.Italic.code + severity));
-            player.addChatMessage(new ChatComponentText(
-                    " (" + individualWarps[0] + " " + StatCollector.translateToLocal("chat.warptheory.permanentwarp") +
-                            ", " + individualWarps[1] + " " + StatCollector.translateToLocal("chat.warptheory.normalwarp") +
-                            ", " + individualWarps[2] + " " + StatCollector.translateToLocal("chat.warptheory.tempwarp") + ")"));
+                severity = I18n.translateToLocal("chat.warptheory.deadlywarp");
+            player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE.toString() + TextFormatting.ITALIC + severity));
+            player.sendMessage(new TextComponentString(
+                    " (" + individualWarps[0] + " " + I18n.translateToLocal("chat.warptheory.permanentwarp") +
+                            ", " + individualWarps[1] + " " + I18n.translateToLocal("chat.warptheory.normalwarp") +
+                            ", " + individualWarps[2] + " " + I18n.translateToLocal("chat.warptheory.tempwarp") + ")"));
+            if (!player.capabilities.isCreativeMode && ThaumcraftApi.internalMethods.getActualWarp(player) > 10) {
+                item.setCount(item.getCount() - 1);
+            }
         }
-
-        if (!player.capabilities.isCreativeMode && WarpHandler.getTotalWarp(player) > 10)
-            stack.stackSize--;
-
-        return stack;
+        return super.onItemRightClick(world, player, handIn);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean advanced)
+    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        infoList.add(FormatCodes.DarkGrey.code + FormatCodes.Italic.code + StatCollector.translateToLocal("tooltip.warptheory.paper"));
+        tooltip.add(FormatCodes.DarkGrey.code + FormatCodes.Italic.code + I18n.translateToLocal("tooltip.warptheory.paper"));
     }
 }

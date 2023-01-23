@@ -1,12 +1,16 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.WarpTheory;
 import shukaro.warptheory.entity.EntityPassiveCreeper;
 import shukaro.warptheory.handlers.IWarpEvent;
@@ -40,7 +44,7 @@ public class WarpFriend extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.friend"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.friend"));
         MiscHelper.modEventInt(player, "friend", 1);
         return true;
     }
@@ -61,14 +65,14 @@ public class WarpFriend extends IWarpEvent
                     int targetX = (int)player.posX + e.world.rand.nextInt(4) - e.world.rand.nextInt(4);
                     int targetY = (int)player.posY + e.world.rand.nextInt(4) - e.world.rand.nextInt(4);
                     int targetZ = (int)player.posZ + e.world.rand.nextInt(4) - e.world.rand.nextInt(4);
-                    if (e.world.isAirBlock(targetX, targetY, targetZ) && e.world.isAirBlock(targetX, targetY + 1, targetZ))
+                    if (e.world.isAirBlock(new BlockPos(targetX, targetY, targetZ)) && e.world.isAirBlock(new BlockPos(targetX, targetY + 1, targetZ)))
                     {
                         EntityPassiveCreeper creeper = new EntityPassiveCreeper(e.world);
                         try { creeper.setCustomNameTag(WarpTheory.normalNames.compose(e.world.rand.nextInt(3) + 2)); }
                         catch (Exception x) { x.printStackTrace(); }
                         creeper.playLivingSound();
                         creeper.setLocationAndAngles((double)targetX + e.world.rand.nextDouble(), (double)targetY + e.world.rand.nextDouble(), (double)targetZ + e.world.rand.nextDouble(), e.world.rand.nextFloat(), e.world.rand.nextFloat());
-                        if (e.world.spawnEntityInWorld(creeper))
+                        if (e.world.spawnEntity(creeper))
                         {
                             MiscHelper.getWarpTag(player).setInteger("friend", --friend);
                             if (friend <= 0)

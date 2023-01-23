@@ -2,6 +2,7 @@ package shukaro.warptheory.gui;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import shukaro.warptheory.items.WarpItems;
 
 public class WarpTab extends CreativeTabs
@@ -12,8 +13,8 @@ public class WarpTab extends CreativeTabs
     }
 
     @Override
-    public Item getTabIconItem()
+    public ItemStack getTabIconItem()
     {
-        return WarpItems.itemCleanser;
+        return WarpItems.itemCleanser.getDefaultInstance();
     }
 }

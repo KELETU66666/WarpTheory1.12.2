@@ -1,38 +1,53 @@
 package shukaro.warptheory.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import shukaro.warptheory.WarpTheory;
 import shukaro.warptheory.handlers.WarpHandler;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.Constants;
 import shukaro.warptheory.util.FormatCodes;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.crafting.InfusionRecipe;
+import thaumcraft.api.items.ItemsTC;
 
+import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Locale;
 
-public class ItemCleanser extends Item
+import static shukaro.warptheory.items.WarpItems.itemCleanser;
+
+public class ItemCleanser extends ItemFood
 {
-    private IIcon icon;
 
     public ItemCleanser()
     {
-        super();
+        super(0, 0, false);
         this.setHasSubtypes(true);
         this.setMaxStackSize(16);
         this.setMaxDamage(0);
         this.setCreativeTab(WarpTheory.mainTab);
         this.setUnlocalizedName(Constants.ITEM_WARPCLEANSER);
+        this.setAlwaysEdible();
+        this.setRegistryName("item_cleanser");
+        this.setCreativeTab(WarpTheory.mainTab);
     }
 
     @Override
@@ -43,62 +58,25 @@ public class ItemCleanser extends Item
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item id, CreativeTabs tab, List list)
-    {
-        list.add(new ItemStack(id, 1, 0));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg)
-    {
-        this.icon = reg.registerIcon(Constants.modID.toLowerCase(Locale.ENGLISH) + ":" + "itemCleanser");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public EnumRarity getRarity(ItemStack stack)
     {
-        return EnumRarity.uncommon;
+        return EnumRarity.UNCOMMON;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int meta)
-    {
-        return this.icon;
-    }
-
-    @Override
-    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-    {
-        return this.icon;
-    }
-
-    @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
-    {
-        player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
-        return stack;
-    }
-
-    @Override
-    public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
+    public void onFoodEaten(ItemStack stack, World world, EntityPlayer player)
     {
         if (!world.isRemote)
         {
             if (WarpHandler.getTotalWarp(player) > 0)
-                ChatHelper.sendToPlayer(player, StatCollector.translateToLocal("chat.warptheory.purge"));
+                ChatHelper.sendToPlayer(player, I18n.translateToLocal("chat.warptheory.purge"));
             else
-                ChatHelper.sendToPlayer(player, StatCollector.translateToLocal("chat.warptheory.purgefail"));
-            world.playSoundAtEntity(player, "game.potion.smash", 1.0f, 1.0f);
+                ChatHelper.sendToPlayer(player, I18n.translateToLocal("chat.warptheory.purgefail"));
+            player.world.playSound(null, player.posX, player.posY, player.posZ,
+                    SoundEvents.ENTITY_SPLASH_POTION_BREAK, SoundCategory.PLAYERS, 1F,
+                    1.0F + (float) player.getEntityWorld().rand.nextGaussian() * 0.05F);
             WarpHandler.purgeWarp(player);
         }
-
-        if (!player.capabilities.isCreativeMode)
-            stack.stackSize--;
-
-        return stack.stackSize <= 0 ? null : stack;
     }
 
     @Override
@@ -110,13 +88,13 @@ public class ItemCleanser extends Item
     @Override
     public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.eat;
+        return EnumAction.EAT;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean advanced)
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        infoList.add(FormatCodes.DarkGrey.code + FormatCodes.Italic.code + StatCollector.translateToLocal("tooltip.warptheory.cleanser"));
+        tooltip.add(FormatCodes.DarkGrey.code + FormatCodes.Italic.code + I18n.translateToLocal("tooltip.warptheory.cleanser"));
     }
 }

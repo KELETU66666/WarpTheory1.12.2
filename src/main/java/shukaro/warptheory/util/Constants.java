@@ -6,9 +6,9 @@ package shukaro.warptheory.util;
 public class Constants {
 
     //Mod Properties
-    public static final String modID = "WarpTheory";
+    public static final String modID = "warptheory";
     public static final String modName = "WarpTheory";
-    public static final String modVersion = "1.7.10R1.0f.Custom";
+    public static final String modVersion = "1.12.2";
 
     //Research Categories
     public static final String CATEGORY_WARPTHEORY = "WT_Category";

@@ -1,13 +1,15 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.FormatCodes;
@@ -39,7 +41,7 @@ public class WarpBats extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.bats"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.bats"));
         MiscHelper.modEventInt(player, "bats", 15 + world.rand.nextInt(30));
         return true;
     }
@@ -60,12 +62,12 @@ public class WarpBats extends IWarpEvent
                     int targetX = (int)player.posX + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
                     int targetY = (int)player.posY + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
                     int targetZ = (int)player.posZ + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
-                    if (e.world.isAirBlock(targetX, targetY, targetZ))
+                    if (e.world.isAirBlock(new BlockPos(targetX, targetY, targetZ)))
                     {
                         EntityBat bat = new EntityBat(e.world);
                         bat.playLivingSound();
                         bat.setLocationAndAngles((double)targetX + e.world.rand.nextDouble(), (double)targetY + e.world.rand.nextDouble(), (double)targetZ + e.world.rand.nextDouble(), e.world.rand.nextFloat(), e.world.rand.nextFloat());
-                        if (e.world.spawnEntityInWorld(bat))
+                        if (e.world.spawnEntity(bat))
                         {
                             MiscHelper.getWarpTag(player).setInteger("bats", --bats);
                             if (bats <= 0)

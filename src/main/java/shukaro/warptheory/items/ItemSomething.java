@@ -1,39 +1,46 @@
 package shukaro.warptheory.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
+
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import shukaro.warptheory.WarpTheory;
-import shukaro.warptheory.handlers.WarpHandler;
 import shukaro.warptheory.util.Constants;
 import shukaro.warptheory.util.FormatCodes;
-import thaumcraft.api.ThaumcraftApiHelper;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.aspects.Aspect;
+import thaumcraft.api.aspects.AspectList;
+import thaumcraft.api.capabilities.IPlayerWarp;
+import thaumcraft.api.crafting.CrucibleRecipe;
 
 import java.util.List;
-import java.util.Locale;
 
-public class ItemSomething extends Item
+import static shukaro.warptheory.items.WarpItems.itemSomething;
+
+public class ItemSomething extends ItemFood
 {
-    private IIcon icon;
-
     public ItemSomething()
     {
-        super();
+        super(0, 0, false);
         this.setHasSubtypes(true);
         this.setMaxStackSize(64);
         this.setMaxDamage(0);
         this.setCreativeTab(WarpTheory.mainTab);
         this.setUnlocalizedName(Constants.ITEM_SOMETHING);
+        this.setRegistryName("item_something");
+        this.setAlwaysEdible();
+        this.setCreativeTab(WarpTheory.mainTab);
     }
 
     @Override
@@ -44,69 +51,18 @@ public class ItemSomething extends Item
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item id, CreativeTabs tab, List list)
-    {
-        list.add(new ItemStack(id, 1, 0));
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg)
-    {
-        this.icon = reg.registerIcon(Constants.modID.toLowerCase(Locale.ENGLISH) + ":" + "itemSomething");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
     public EnumRarity getRarity(ItemStack stack)
     {
-        return EnumRarity.uncommon;
+        return EnumRarity.UNCOMMON;
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int meta)
-    {
-        return this.icon;
-    }
-
-    @Override
-    public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-    {
-        return this.icon;
-    }
-
-    @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player)
-    {
-        player.setItemInUse(stack, this.getMaxItemUseDuration(stack));
-        return stack;
-    }
-
-    @Override
-    public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
-    {
-        if (!world.isRemote)
-        {
-            player.addChatMessage(new ChatComponentText(FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.addwarp")));
-            if (WarpHandler.warpPermanent != null)
-            {
-                ThaumcraftApiHelper.addWarpToPlayer(player, 4 + world.rand.nextInt(4), false);
-                ThaumcraftApiHelper.addWarpToPlayer(player, 5 + world.rand.nextInt(5), true);
-                ThaumcraftApiHelper.addStickyWarpToPlayer(player, 5 + world.rand.nextInt(5));
-            }
-            else
-            {
-                ThaumcraftApiHelper.addWarpToPlayer(player, 7 + world.rand.nextInt(7), false);
-                ThaumcraftApiHelper.addWarpToPlayer(player, 7 + world.rand.nextInt(7), true);
-            }
-
+    protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
+        if(!worldIn.isRemote) {
+            ThaumcraftApi.internalMethods.addWarpToPlayer(player,5 + worldIn.rand.nextInt(5), IPlayerWarp.EnumWarpType.TEMPORARY);
+            ThaumcraftApi.internalMethods.addWarpToPlayer(player,4 + worldIn.rand.nextInt(4), IPlayerWarp.EnumWarpType.PERMANENT);
+            ThaumcraftApi.internalMethods.addWarpToPlayer(player,5 + worldIn.rand.nextInt(5), IPlayerWarp.EnumWarpType.NORMAL);
         }
-
-        if (!player.capabilities.isCreativeMode)
-            stack.stackSize--;
-
-        return stack;
     }
 
     @Override
@@ -118,13 +74,13 @@ public class ItemSomething extends Item
     @Override
     public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.eat;
+        return EnumAction.EAT;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List infoList, boolean advanced)
+    public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-        infoList.add(FormatCodes.DarkGrey.code + FormatCodes.Italic.code + StatCollector.translateToLocal("tooltip.warptheory.something"));
+        tooltip.add(FormatCodes.DarkGrey.code + FormatCodes.Italic.code + I18n.translateToLocal("tooltip.warptheory.something"));
     }
 }

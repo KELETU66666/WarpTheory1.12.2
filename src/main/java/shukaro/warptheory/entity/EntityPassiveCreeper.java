@@ -9,12 +9,9 @@ public class EntityPassiveCreeper extends EntityCreeper
     public EntityPassiveCreeper(World world)
     {
         super(world);
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(100.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
     }
 
     @Override
     public int getCreeperState() { return -1; }
-
-    @Override
-    public boolean allowLeashing() { return true; }
 }

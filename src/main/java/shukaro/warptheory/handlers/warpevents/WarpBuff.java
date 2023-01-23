@@ -1,8 +1,10 @@
 package shukaro.warptheory.handlers.warpevents;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.ChatHelper;
@@ -14,7 +16,7 @@ public class WarpBuff extends IWarpEvent
 {
 	private final int _mMinWarpLevel;
     private String name;
-    private int id;
+    private Potion id;
     private int duration;
     private int level;
 
@@ -22,7 +24,7 @@ public class WarpBuff extends IWarpEvent
     {
     	_mMinWarpLevel = pMinWarpLevel;
         this.name = name;
-        this.id = effect.getPotionID();
+        this.id = effect.getPotion();
         this.duration = effect.getDuration();
         this.level = effect.getAmplifier();
     }
@@ -49,7 +51,7 @@ public class WarpBuff extends IWarpEvent
         {
             for (PotionEffect e : (Collection<PotionEffect>)player.getActivePotionEffects())
             {
-                if (e.getPotionID() == id)
+                if (e.getPotion() == id)
                 {
                     effect = new PotionEffect(id, duration + e.getDuration(), level);
                     break;
@@ -62,7 +64,7 @@ public class WarpBuff extends IWarpEvent
         {
             effect.getCurativeItems().clear();
             player.addPotionEffect(effect);
-            ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory." + getName()));
+            ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory." + getName()));
         }
         return true;
     }

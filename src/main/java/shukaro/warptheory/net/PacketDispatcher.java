@@ -1,12 +1,12 @@
 package shukaro.warptheory.net;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.FMLEmbeddedChannel;
-import cpw.mods.fml.common.network.FMLOutboundHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.network.FMLEmbeddedChannel;
+import net.minecraftforge.fml.common.network.FMLOutboundHandler;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.net.packets.*;
 
 public class PacketDispatcher
@@ -15,7 +15,7 @@ public class PacketDispatcher
     {
         try
         {
-            int dim = world.provider.dimensionId;
+            int dim = world.provider.getDimension();
             sendToAllAround(new EnderParticlesPacket(x, y, z), dim, (int)x, (int)y, (int)z, 128);
         }
         catch (Exception e)
@@ -40,7 +40,7 @@ public class PacketDispatcher
     {
         try
         {
-            sendToPlayer(new BloodPacket(player.worldObj.provider.dimensionId, x, y, z), player);
+            sendToPlayer(new BloodPacket(player.world.provider.getDimension(), x, y, z), player);
         }
         catch (Exception e)
         {

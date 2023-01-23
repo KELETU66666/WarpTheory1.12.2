@@ -1,10 +1,8 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import shukaro.warptheory.WarpTheory;
 import shukaro.warptheory.handlers.ConfigHandler;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.ChatHelper;
@@ -38,7 +36,7 @@ public class WarpRain extends IWarpEvent
     	
         if (!world.getWorldInfo().isThundering())
         {
-            ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.rain"));
+            ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.rain"));
             world.getWorldInfo().setRaining(true);
             world.getWorldInfo().setThundering(true);
             return true;

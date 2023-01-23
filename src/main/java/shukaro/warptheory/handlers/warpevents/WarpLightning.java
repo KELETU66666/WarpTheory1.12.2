@@ -1,13 +1,17 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
+
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.FormatCodes;
@@ -39,7 +43,7 @@ public class WarpLightning extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.lightning"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.lightning"));
         MiscHelper.modEventInt(player, "lightning", 5 + world.rand.nextInt(10));
         return true;
     }
@@ -57,9 +61,9 @@ public class WarpLightning extends IWarpEvent
                 int x = (int)player.posX + e.world.rand.nextInt(3) - e.world.rand.nextInt(3);
                 int y = (int)player.posY;
                 int z = (int)player.posZ + e.world.rand.nextInt(3) - e.world.rand.nextInt(3);
-                if (e.world.rand.nextInt(100) == 0 && e.world.canBlockSeeTheSky(x, y, z))
+                if (e.world.rand.nextInt(100) == 0 && e.world.canBlockSeeSky(new BlockPos(x, y, z)))
                 {
-                    EntityLightningBolt bolt = new EntityLightningBolt(e.world, x, y, z);
+                    EntityLightningBolt bolt = new EntityLightningBolt(e.world, x, y, z, false);
                     e.world.addWeatherEffect(bolt);
                     MiscHelper.getWarpTag(player).setInteger("lightning", --lightning);
                     if (lightning <= 0)

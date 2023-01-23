@@ -1,6 +1,5 @@
 package shukaro.warptheory.net;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -8,7 +7,9 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import shukaro.warptheory.WarpTheory;
 import shukaro.warptheory.handlers.warpevents.WarpBlood;
 import shukaro.warptheory.net.packets.*;
@@ -31,14 +32,14 @@ public class PacketHandler extends SimpleChannelInboundHandler<IWarpPacket>
             if (msg instanceof DecrementPacket)
             {
                 DecrementPacket dec = (DecrementPacket)msg;
-                if (dec.id == 0)
-                {
-                    EntityPlayer player = MiscHelper.getPlayerByEntityID(dec.player);
-                    int ears = MiscHelper.getWarpTag(player).getInteger("ears");
-                    MiscHelper.getWarpTag(player).setInteger("ears", --ears);
-                    if (ears <= 0)
-                        MiscHelper.getWarpTag(player).removeTag("ears");
-                }
+           //     if (dec.id == 0)
+             //   {
+            //        EntityPlayer player = MiscHelper.getPlayerByEntityID(dec.player);
+               //     int ears = MiscHelper.getWarpTag(player).getInteger("ears");
+              //      MiscHelper.getWarpTag(player).setInteger("ears", --ears);
+              //      if (ears <= 0)
+               //         MiscHelper.getWarpTag(player).removeTag("ears");
+           //     }
             }
         }
         else if (handler instanceof NetHandlerPlayClient)
@@ -49,9 +50,9 @@ public class PacketHandler extends SimpleChannelInboundHandler<IWarpPacket>
                 EntityPlayer player = WarpTheory.proxy.getPlayer();
                 if (player == null)
                     return;
-                World world = player.worldObj;
+                World world = player.world;
                 for (int l = 0; l < 128; ++l)
-                    world.spawnParticle("portal", blink.x + world.rand.nextDouble() - world.rand.nextDouble(), blink.y + world.rand.nextDouble() - world.rand.nextDouble(), blink.z + world.rand.nextDouble() - world.rand.nextDouble(), (double)(world.rand.nextFloat() - 0.5F) * 0.2F, (double)(world.rand.nextFloat() - 0.5F) * 0.2F, (double)(world.rand.nextFloat() - 0.5F) * 0.2F);
+                    world.spawnParticle(EnumParticleTypes.PORTAL, blink.x + world.rand.nextDouble() - world.rand.nextDouble(), blink.y + world.rand.nextDouble() - world.rand.nextDouble(), blink.z + world.rand.nextDouble() - world.rand.nextDouble(), (double)(world.rand.nextFloat() - 0.5F) * 0.2F, (double)(world.rand.nextFloat() - 0.5F) * 0.2F, (double)(world.rand.nextFloat() - 0.5F) * 0.2F);
             }
             else if (msg instanceof VelocityPacket)
             {

@@ -1,14 +1,16 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.net.PacketDispatcher;
 import shukaro.warptheory.util.BlockCoord;
@@ -46,7 +48,7 @@ public class WarpBlood extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.blood"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.blood"));
         MiscHelper.modEventInt(player, "blood", 64 + world.rand.nextInt(128));
         return true;
     }
@@ -66,7 +68,7 @@ public class WarpBlood extends IWarpEvent
                     int targetX = (int)player.posX + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
                     int targetY = (int)player.posY + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
                     int targetZ = (int)player.posZ + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
-                    if (e.world.isAirBlock(targetX, targetY - 1, targetZ) && !e.world.isAirBlock(targetX, targetY, targetZ) && e.world.getBlock(targetX, targetY, targetZ).getMaterial().blocksMovement())
+                    if (e.world.isAirBlock(new BlockPos(targetX, targetY - 1, targetZ)) && !e.world.isAirBlock(new BlockPos(targetX, targetY, targetZ)) && e.world.getBlockState(new BlockPos(targetX, targetY, targetZ)).getMaterial().blocksMovement())
                     {
                         PacketDispatcher.sendBloodEvent(player, targetX, targetY + 1, targetZ);
                         MiscHelper.getWarpTag(player).setInteger("blood", --blood);
@@ -87,10 +89,10 @@ public class WarpBlood extends IWarpEvent
     {
         if (e.phase != TickEvent.Phase.END)
             return;
-        World world = Minecraft.getMinecraft().theWorld;
-        if (world != null && world.getTotalWorldTime() % 5 == 0 && bloody.get(world.provider.dimensionId) != null)
+        World world = Minecraft.getMinecraft().world;
+        if (world != null && world.getTotalWorldTime() % 5 == 0 && bloody.get(world.provider.getDimension()) != null)
         {
-            for (BlockCoord c : bloody.get(world.provider.dimensionId))
+            for (BlockCoord c : bloody.get(world.provider.getDimension()))
                 MiscHelper.spawnDripParticle(world, c.x, c.y, c.z, world.rand.nextFloat() + 0.2f, 0.0f, 0.0f);
         }
     }

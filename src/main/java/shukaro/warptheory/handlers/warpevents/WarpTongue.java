@@ -1,12 +1,12 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.FormatCodes;
@@ -36,7 +36,7 @@ public class WarpTongue extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.tongue"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.tongue"));
         MiscHelper.modEventInt(player, "tongues", 10 + world.rand.nextInt(15));
         return true;
     }
@@ -45,13 +45,13 @@ public class WarpTongue extends IWarpEvent
     public void onMessageReceived(ServerChatEvent e)
     {
         // Warp tongue
-        if (MiscHelper.getWarpTag(e.player).hasKey("tongues"))
+        if (MiscHelper.getWarpTag(e.getPlayer()).hasKey("tongues"))
         {
-            int tongues = MiscHelper.getWarpTag(e.player).getInteger("tongues");
-            e.component = new ChatComponentTranslation("<" + ChatHelper.getUsername(e.component) + "> " + ChatHelper.garbleMessage(e.component));
-            MiscHelper.getWarpTag(e.player).setInteger("tongues", --tongues);
+            int tongues = MiscHelper.getWarpTag(e.getPlayer()).getInteger("tongues");
+            e.setComponent(new TextComponentString("<" + ChatHelper.getUsername(e.getComponent()) + "> " + ChatHelper.garbleMessage(e.getComponent())));
+            MiscHelper.getWarpTag(e.getPlayer()).setInteger("tongues", --tongues);
             if (tongues <= 0)
-                MiscHelper.getWarpTag(e.player).removeTag("tongues");
+                MiscHelper.getWarpTag(e.getPlayer()).removeTag("tongues");
         }
     }
 }

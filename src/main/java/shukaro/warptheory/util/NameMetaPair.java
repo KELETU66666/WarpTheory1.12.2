@@ -3,40 +3,41 @@ package shukaro.warptheory.util;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 public class NameMetaPair
 {
-    private String name;
+    private ResourceLocation name;
     private int meta;
 
     public NameMetaPair(Item item, int meta)
     {
-        this(Item.itemRegistry.getNameForObject(item), meta);
+        this(Item.REGISTRY.getNameForObject(item), meta);
     }
 
     public NameMetaPair(Block block, int meta)
     {
-        this(Block.blockRegistry.getNameForObject(block), meta);
+        this(Block.REGISTRY.getNameForObject(block), meta);
     }
 
-    public NameMetaPair(String name, int meta)
+    public NameMetaPair(ResourceLocation name, int meta)
     {
         this.name = name;
         this.meta = meta;
     }
 
-    public String getName() { return this.name; }
+    public ResourceLocation getName() { return this.name; }
 
-    public void setName(String name) { this.name = name; }
+    public void setName(ResourceLocation name) { this.name = name; }
 
     public Block getBlock()
     {
-        return (Block)Block.blockRegistry.getObject(name);
+        return (Block)Block.REGISTRY.getObject(name);
     }
 
     public Item getItem()
     {
-        return (Item)Item.itemRegistry.getObject(name);
+        return (Item)Item.REGISTRY.getObject(name);
     }
 
     public int getMetadata()

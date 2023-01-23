@@ -1,4 +1,4 @@
-itemGroup.warptheory.tab=Warp Theory
+tc.research_category.WARPTHEORY=Warp Theory
 
 chat.warptheory.purge=对此你有一种糟糕的预感...
 chat.warptheory.purgefail=没什么特别的事情发生
@@ -22,21 +22,21 @@ tooltip.warptheory.amulet=祛除扭曲
 tooltip.warptheory.something=没准能吃...
 tooltip.warptheory.paper=对扭曲产生反应
 
-tc.research_name.WARPSOMETHING=块状物
-tc.research_text.WARPSOMETHING=绝非什么令人愉悦的玩意儿
-research.warptheory.warpsomething=你无意之中发现如果把一些肉暴露在邪术能量中它们会变成别的玩意儿.额……什么事情都追究到底可不是好事.
+warptheory.research.warppaper.title=扭曲检测
+warptheory.research.warppaper.text=魔导手册上详细的讲述了神智检测仪是如何工作的,但是它只能给予我大概的数值,我想要更加精确的数据,而不是一点粗糙的颜色反应.
+warptheory.research.warppaper.complete.text=我已经决定,需要更精确的东西来衡量体内负面魔法能量的积累,而不是统计周围发生了什么扭曲反应.<BR>通过将世界盐与灵气注入纸张中,制造出一种能精确读取自己究竟暴露在多高的危险之中的试纸.
 
-tc.research_name.WARPCLEANSER=纯净泪水
-tc.research_text.WARPCLEANSER=魔药
-research.warptheory.warpcleanser=通过融合幽魂眼泪治愈的特性,世界盐的魔力特性以及水晶的稳定特性,你发现一种祛除体内负面魔法能量的方法.<BR>但这种方法并非毫无代价,所有这些负面的魔法能量都汇集往某个地方.
+warptheory.research.puretear.title=纯净泪水
+warptheory.research.puretear.stage.1.text=通过融合幽魂眼泪治愈的特性,世界盐的魔力特性以及水晶的稳定特性,你发现一种祛除体内负面魔法能量的方法...
+warptheory.research.puretear.complete.text=通过融合幽魂眼泪治愈的特性,世界盐的魔力特性以及水晶的稳定特性,你发现一种祛除体内负面魔法能量的方法.<BR>但这种方法并非毫无代价,所有这些负面的魔法能量都汇集往某个地方.
 
-tc.research_name.WARPAMULET=净化护身符
-tc.research_text.WARPAMULET=比一个仅仅带来好运的护身符更棒
-research.warptheory.warpamulet=你发现一种方法,能够缓慢发挥纯净泪水的净化能力却不会导致不良反应.<BR>将两种对立的泪水融入护身符,并灌入恰当类型的魔力,就能做出一件持续将体内负面魔法能量排出到环境中的饰件.
+warptheory.research.something.title=腐化肉块
+warptheory.research.something.stage.1.text=额...这是什么玩意...<BR>我有一种不好的预感,它甚至似乎在蠕动!<BR>嘿...乐观点,万一塞翁失马呢?
+warptheory.research.something.complete.text=嗯,一种腐化的味道.毫无意外,还会增加扭曲.<BR>甚至能感觉到它像是腐化的蛆虫一样从舌尖缓慢的蠕动到胃袋里.迸发的纤维布满你的食道,细微的蛆虫缓慢爬进我的脑干.<BR>我为什么要吃这种东西?因为贪婪么?
 
-tc.research_name.WARPPAPER=奥术石蕊试纸
-tc.research_text.WARPPAPER=近乎科学
-research.warptheory.warppaper=你认定你需要一种更精确的工具,用来统计纠缠在你身体当中的负面魔法能量,而非仅仅依靠记录发生在你身上那些古怪的病兆的次数.<BR>向纸张灌入世界盐和水之源质,你制作出一种试纸,能够测算出你究竟向身体内那些危险的禁域探索了多深.
+warptheory.research.cleansingamulet.title=根治扭曲
+warptheory.research.cleansingamulet.stage.1.text=我已经受够了扭曲的折磨,但是无论我使用多少肥皂与浴盐,我也只能缓解这种效果...而不能根治它!<BR>在一个偶然的机会下,我得到了一张残破的卷轴,上面书写了如何将你的扭曲传染给其他的人,但我空旷的住宅里只有我孤零零的一个人（和在一旁忙碌的傀儡）.<BR>我得想想办法解决这个问题.
+warptheory.research.cleansingamulet.complete.text=我按照残卷上的方法解决了问题,使用净化浴盐和驱邪肥皂的力量制作了一个新的护身符,它能缓慢的将自己那些不可扭转的扭曲转换成相应的扭曲效果到...自己身上!<BR> 这听起来虽然很荒谬,但是似乎不再是那么不可磨灭的...也许这也算是神秘使的一种突破吧!
 
 chat.warptheory.bats=扑响声回荡在空气中...
 chat.warptheory.blink=你突然迷失了方向...

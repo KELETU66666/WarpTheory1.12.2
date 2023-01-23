@@ -1,23 +1,24 @@
 package shukaro.warptheory.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class WarpItems
 {
-    public static ItemCleanser itemCleanser;
-    public static ItemAmulet itemAmulet;
-    public static ItemSomething itemSomething;
-    public static ItemPaper itemPaper;
+    public static Item itemCleanser;
+    public static Item itemAmulet;
+    public static Item itemSomething;
+    public static Item itemPaper;
 
     public static void initItems()
     {
         itemCleanser = new ItemCleanser();
+        ForgeRegistries.ITEMS.register(itemCleanser);
         itemAmulet = new ItemAmulet();
+        ForgeRegistries.ITEMS.register(itemAmulet);
         itemSomething = new ItemSomething();
+        ForgeRegistries.ITEMS.register(itemSomething);
         itemPaper = new ItemPaper();
-        GameRegistry.registerItem(itemCleanser, itemCleanser.getUnlocalizedName());
-        GameRegistry.registerItem(itemAmulet, itemAmulet.getUnlocalizedName());
-        GameRegistry.registerItem(itemSomething, itemSomething.getUnlocalizedName());
-        GameRegistry.registerItem(itemPaper, itemPaper.getUnlocalizedName());
+        ForgeRegistries.ITEMS.register(itemPaper);
     }
 }

@@ -1,14 +1,12 @@
 package shukaro.warptheory.util;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
-import net.minecraft.world.World;
 
-import java.util.List;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import java.util.Random;
 
 public class ChatHelper
@@ -17,21 +15,10 @@ public class ChatHelper
 
     public static void sendToPlayer(EntityPlayer player, String message)
     {
-        player.addChatMessage(new ChatComponentText(message));
+        player.sendMessage(new TextComponentString(message));
     }
 
-    public static void sendToAll(String message)
-    {
-        MinecraftServer.getServer().getConfigurationManager().sendChatMsg(new ChatComponentText(message));
-    }
-
-    public static void sendToWorld(World world, String message)
-    {
-        for (EntityPlayer player : (List<EntityPlayer>)world.playerEntities)
-            player.addChatMessage(new ChatComponentText(message));
-    }
-
-    public static String getUsername(IChatComponent message)
+    public static String getUsername(ITextComponent message)
     {
         if (!message.getUnformattedText().contains("<") || !message.getUnformattedText().contains(">"))
             return "";
@@ -39,25 +26,25 @@ public class ChatHelper
     }
 
     @SideOnly(Side.CLIENT)
-    public static String getFormattedUsername(IChatComponent message)
+    public static String getFormattedUsername(ITextComponent message)
     {
         if (!message.getFormattedText().contains("<") || !message.getFormattedText().contains(">"))
             return "";
         return message.getFormattedText().split(" ")[0];
     }
 
-    public static String getText(IChatComponent message)
+    public static String getText(ITextComponent message)
     {
         return message.getUnformattedText().replaceFirst("<.*> ", "");
     }
 
     @SideOnly(Side.CLIENT)
-    public static String getFormattedText(IChatComponent message)
+    public static String getFormattedText(ITextComponent message)
     {
         return message.getFormattedText().replaceFirst("<.*> ", "");
     }
 
-    public static String garbleMessage(IChatComponent message)
+    public static String garbleMessage(ITextComponent message)
     {
         String text = getText(message);
         String newText = "";

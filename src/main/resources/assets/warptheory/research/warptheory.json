@@ -1,0 +1,141 @@
+{
+  "entries": [
+    {
+      "key": "WARP_PAPER",
+      "name": "warptheory.research.warppaper.title",
+      "category": "WARPTHEORY",
+      "icons": [
+        "warptheory:item_warppaper"
+      ],
+      "parents": [
+        "WARP", "FIRSTSTEPS"
+      ],"meta":["ROUND", "REVERSE"],
+      "location": [
+        0,
+        0
+      ],
+      "stages": [
+        {
+          "text": "warptheory.research.warppaper.text",
+          "required_craft": [
+            "thaumcraft:sanity_checker"
+          ],
+          "required_knowledge": [
+            "OBSERVATION;BASICS;1"
+          ]
+        },
+        {
+          "text": "warptheory.research.warppaper.complete.text",
+          "recipes": [
+            "warptheory:warp_paper"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "TAINT_MEAT",
+      "name": "warptheory.research.something.title",
+      "category": "WARPTHEORY",
+      "icons": [
+        "warptheory:item_something"
+      ],"meta":["HEX"],
+      "parents": [
+        "~BASEALCHEMY", "WARP_PAPER"
+      ],
+      "location": [
+        1,
+        -2
+      ],
+      "stages": [
+        {
+          "text": "warptheory.research.something.stage.1.text",
+          "required_item": [
+            "thaumcraft:triple_meat_treat"
+          ],
+          "required_knowledge": [
+            "OBSERVATION;BASICS;1",
+            "OBSERVATION;ALCHEMY;1",
+            "THEORY;ALCHEMY;1"
+          ],
+          "warp": 3
+        },
+        {
+          "text": "warptheory.research.something.complete.text",
+          "recipes": [
+            "warptheory:taint_meat1","warptheory:taint_meat2","warptheory:taint_meat","warptheory:taint_meat4","warptheory:taint_meat5","warptheory:taint_meat6"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "PURE_TEAR",
+      "name": "warptheory.research.puretear.title",
+      "category": "WARPTHEORY",
+      "icons": [
+        "warptheory:item_cleanser"
+      ],"meta":["ROUND", "HIDDEN"],
+      "parents": [
+        "WARP_PAPER", "INFUSION"
+      ],
+      "location": [
+        -2,
+        0
+      ],
+      "stages": [
+        {
+          "text": "warptheory.research.puretear.stage.1.text",
+          "required_item": ["minecraft:ghast_tear"],
+          "required_knowledge": [
+            "THEORY;INFUSION;2",
+            "THEORY;ELDRITCH;2"
+          ]
+        },
+        {
+          "text": "warptheory.research.puretear.complete.text",
+          "recipes": [
+            "warptheory:item_cleanser"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "CLEANSING_AMULET",
+      "name": "warptheory.research.cleansingamulet.title",
+      "category": "WARPTHEORY",
+      "icons": [
+        "warptheory:item_cleansing_amulet"
+      ],
+      "parents": [
+        "PURE_TEAR"
+      ],
+      "location": [
+        -3,-1
+      ],
+      "meta": [
+        "HIDDEN"
+      ],
+      "stages": [
+        {
+          "text": "warptheory.research.cleansingamulet.stage.1.text",
+          "required_item": [
+            "thaumcraft:sanity_soap", "warptheory:item_warppaper"
+          ],
+          "required_craft": [
+            "warptheory:item_cleanser"
+          ],
+          "required_knowledge": [
+            "OBSERVATION;BASICS;1",
+            "OBSERVATION;INFUSION;1",
+            "THEORY;INFUSION;1"
+          ]
+        },
+        {
+          "text": "warptheory.research.cleansingamulet.complete.text",
+          "recipes": [
+            "warptheory:cleansing_amulet"
+          ]
+        }
+      ]
+    }
+  ]
+}

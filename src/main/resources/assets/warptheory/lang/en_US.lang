@@ -1,6 +1,6 @@
 
 # << creative tab name >>
-itemGroup.warptheory.tab=Warp Theory
+tc.research_category.WARPTHEORY=Warp Theory
 
 # << chat item effects >>
 chat.warptheory.purge=You've got a bad feeling about this...
@@ -27,24 +27,24 @@ tooltip.warptheory.something=Probably edible...
 tooltip.warptheory.paper=Reacts to Warp
 
 # << hunk of something >>
-tc.research_name.warptheory.something=Hunk of Something
-tc.research_text.warptheory.something=Definitely not something pleasant
-research.warptheory.warpsomething=By chance you realized that many simple meats could be transmuted into something else if they were exposed to eldritch energy. It's... probably not a good idea to look too closely at the result.
+warptheory.research.something.title=Tainted Amalgam
+warptheory.research.something.stage.1.text=Perhaps i should not reject the Warp, perhaps i should embrace it, perhaps... what forbidden secrets could it teach me?
+warptheory.research.something.complete.text=This was a mistake, dunking common Meat directly into Vitium Essentia corrupts and morphs it into an incomprehensible substance that is mentally taxing to eat.<BR>Though, i suppose if i am ever in need of madness, this is where to look...
 
 # << pure tear >>
-tc.research_name.warptheory.cleanser=Pure Tear
-tc.research_text.warptheory.cleanser=Magical Medicine
-research.warptheory.warpcleanser=By combining the curative properties of Ghast Tears, the magical energy of Salis Mundus, and the stabilizing properties of crystals, you've discovered a means of purging negative magical energy from the body.<BR>The process is not without drawbacks, though, as all that energy has to go somewhere.
+warptheory.research.puretear.title=Pure Tear
+warptheory.research.puretear.stage.1.text=By combining the curative properties of Ghast Tears, the magical energy of Salis Mundus, and the stabilizing properties of crystals, you've discovered a means of purging negative magical energy from the body...
+warptheory.research.puretear.complete.text=By combining the curative properties of Ghast Tears, the magical energy of Salis Mundus, and the stabilizing properties of crystals, you've discovered a means of purging negative magical energy from the body.<BR>The process is not without drawbacks, though, as all that energy has to go somewhere.
 
 # << purification talisman >>
-tc.research_name.warptheory.amulet=Purification Talisman
-tc.research_text.warptheory.amulet=More than a simple good luck charm
-research.warptheory.amulet=You've discovered a process by which the purifying properties of Pure Tears can be channeled over time without the requisite indigestion they cause.<BR>By simply setting two opposing tears into an amulet and imbuing it with certain magic, an accessory which continuously siphons off negative magical energy into the environment is produced.
+warptheory.research.cleansingamulet.title=Cleansing Amulet
+warptheory.research.cleansingamulet.stage.1.text=This madness is getting to me, i must do something about it. Scraps of research i've found from long-gone Thaumaturges of the Fourth Age rarely referenced a trinket only known as the Cleansing Amulet, if i am correct in my guesses, this Amulet should be able to cleanse Warp from me, though i do not know to what extent...
+warptheory.research.cleansingamulet.complete.text=I believe i've found the key to replicating this Amulet, Primordial Pearls seem to have a faint trickle of malignant energy, much like Warp, wherever their power comes from, it is tied to the same force as my madness, somehow.<BR>If my hypothesis is correct, this Pendant should be able to draw the madness from my very mind, binding it to the pearl and purifying it, making it little more than a bad dream, it does take time to do this, however, but it should even be capable of cleansing the most Permanent of madness.
 
-<< litmus paper >>
-tc.research_name.warptheory.paper=Arcane Litmus Paper
-tc.research_text.warptheory.paper=Almost scientific
-research.warptheory.paper=You've decided that you'll need something somewhat more accurate than counting the strange events that happen around you to gauge the buildup of negative magical energy in your body.<BR>By imbuing some paper with Salis Mundus and the essence of water, you've created a means to get a read on just how much danger you've been exposing yourself to.
+# << litmus paper >>
+warptheory.research.warppaper.title=Arcane Litmus Paper
+warptheory.research.warppaper.text=Sometimes, a Sanity Checker is just too imprecise, especially when my Warp levels are greater than what it was designed to handle, perhaps i can invent some more precise device?
+warptheory.research.warppaper.complete.text=Making anything reusable to measure Warp in higher amounts seems to be difficult, Warp is a powerful force that can overwhelm all manner of things designed to tinker with it, so it seems i will have to go with one of my earliest, yet most wasteful solutions...<BR>Arcane Litmus Paper, as i have dubbed it, is based on scraps from some Fourth Age Thaumturges, who supposedly discovered it. This Paper, when contacting an appropriate part of my body, will react depending on how much Warp i have, with the reaction being more violent the greater the amount, to a destructive point for the paper, thanks to overwhelming force of Warp.<BR>This will grant me a means of quantifying Warp at larger amounts, depending on the violence of the reaction, it may not be the most useful to my apparent self, but perhaps it is useful to the deeper parts of my mind...? No, that's absurd.
 
 # << chat warp effects >>
 chat.warptheory.bats=The sounds of wingbeats fill the air...

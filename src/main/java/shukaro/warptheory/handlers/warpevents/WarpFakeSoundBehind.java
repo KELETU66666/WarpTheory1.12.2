@@ -1,11 +1,15 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.MiscHelper;
 
@@ -45,7 +49,7 @@ public class WarpFakeSoundBehind extends IWarpEvent
     public boolean doEvent(World world, EntityPlayer player)
     {
         //No message
-        //ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.fakesoundbehind"));
+        //ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.fakesoundbehind"));
         MiscHelper.modEventInt(player, getName(), 1);
         return true;
     }
@@ -69,7 +73,7 @@ public class WarpFakeSoundBehind extends IWarpEvent
 
                 //wtf do last two parameters do?  Documentation appears non-existent.
                 //TODO: replace with something not a guess
-                e.world.playSoundEffect(targetX, player.posY, targetZ, sound, 1.0F, 1.0F);
+                e.world.playSound((double)targetX, player.posY, (double)targetZ, SoundEvents.ENTITY_WITHER_AMBIENT, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
 
                 MiscHelper.getWarpTag(player).setInteger(getName(), --fakesound);
             }

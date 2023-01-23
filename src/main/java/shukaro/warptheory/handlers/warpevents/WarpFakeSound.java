@@ -1,11 +1,17 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
+
+import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.MiscHelper;
 
@@ -15,10 +21,10 @@ public class WarpFakeSound extends IWarpEvent
 {
 	private final int _mMinWarpLevel;
     private final String name;
-    private final String sound;
+    private final SoundEvent sound;
     private int distance = 16; //radius in blocks about player in which it can occur
 
-    public WarpFakeSound(int pMinWarpLevel, String name, String sound)
+    public WarpFakeSound(int pMinWarpLevel, String name, SoundEvent sound)
     {
     	_mMinWarpLevel = pMinWarpLevel;
         this.name = name;
@@ -26,7 +32,7 @@ public class WarpFakeSound extends IWarpEvent
         FMLCommonHandler.instance().bus().register(this);
     }
 
-    public WarpFakeSound(int pMinWarpLevel, String name, String sound, int distance)
+    public WarpFakeSound(int pMinWarpLevel, String name, SoundEvent sound, int distance)
     {
     	_mMinWarpLevel = pMinWarpLevel;
         this.name = name;
@@ -45,7 +51,7 @@ public class WarpFakeSound extends IWarpEvent
     public boolean doEvent(World world, EntityPlayer player)
     {
         //No message. Otherwise kinda spoils the surprise.  Nobody will pay attention if they see "fake explosion happened!" message
-        //ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.fakesound"));
+        //ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.fakesound"));
         MiscHelper.modEventInt(player, getName(), 1);
         return true;
     }
@@ -71,7 +77,7 @@ public class WarpFakeSound extends IWarpEvent
 
                 //wtf do last two parameters do?  Documentation appears non-existent.
                 //TODO: replace with something not a guess
-                e.world.playSoundEffect(targetX, targetY, targetZ, sound, 1.0F, 1.0F);
+                e.world.playSound((double)targetX, (double)targetY, (double)targetZ, sound, SoundCategory.NEUTRAL, 1.0F, 1.0F, false);
 
                 MiscHelper.getWarpTag(player).setInteger(getName(), --fakesound);
             }

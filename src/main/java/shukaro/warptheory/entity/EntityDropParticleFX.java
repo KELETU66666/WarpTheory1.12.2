@@ -1,15 +1,15 @@
 package shukaro.warptheory.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntityDropParticleFX extends EntityFX {
+public class EntityDropParticleFX extends Particle {
 
     private int bobTimer;
 
@@ -52,13 +52,13 @@ public class EntityDropParticleFX extends EntityFX {
         } else {
             this.setParticleTextureIndex(112);
         }
-        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+        this.move(this.motionX, this.motionY, this.motionZ);
         this.motionX *= 0.9800000190734863D;
         this.motionY *= 0.9800000190734863D;
         this.motionZ *= 0.9800000190734863D;
 
         if (this.particleMaxAge-- <= 0) {
-            this.setDead();
+            this.setExpired();
         }
         if (this.onGround) {
             this.setParticleTextureIndex(114);
@@ -66,27 +66,29 @@ public class EntityDropParticleFX extends EntityFX {
             this.motionZ *= 0.699999988079071D;
         }
         if (this.particleGravity > 0) {
-            Material material = this.worldObj.getBlock((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ)).getMaterial();
+            Material material = this.world.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ))).getMaterial();
 
             if (material.isLiquid() || material.isSolid()) {
                 double d0 = Math.floor(this.posY)
                         + 1
-                        - BlockLiquid.getLiquidHeightPercent(this.worldObj.getBlockMetadata((int)Math.floor(this.posX), (int)Math.floor(this.posY),
-                        (int)Math.floor(this.posZ)));
+                        - BlockLiquid.getLiquidHeightPercent(this.world.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY),
+                        (int)Math.floor(this.posZ))).getBlock().getMetaFromState(this.world.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY),
+                        (int)Math.floor(this.posZ)))));
                 if (this.posY < d0) {
-                    this.setDead();
+                    this.setExpired();
                 }
             }
         } else {
-            Material material = this.worldObj.getBlock((int)Math.ceil(this.posX), (int)Math.ceil(this.posY), (int)Math.ceil(this.posZ)).getMaterial();
+            Material material = this.world.getBlockState(new BlockPos((int)Math.ceil(this.posX), (int)Math.ceil(this.posY), (int)Math.ceil(this.posZ))).getMaterial();
 
             if (material.isLiquid() || material.isSolid()) {
                 double d0 = (int)Math.ceil(this.posY)
                         + 1
-                        - BlockLiquid.getLiquidHeightPercent(this.worldObj.getBlockMetadata((int)Math.ceil(this.posX), (int)Math.ceil(this.posY),
-                        (int)Math.ceil(this.posZ)));
+                        - BlockLiquid.getLiquidHeightPercent(this.world.getBlockState(new BlockPos((int)Math.ceil(this.posX), (int)Math.ceil(this.posY),
+                        (int)Math.ceil(this.posZ))).getBlock().getMetaFromState(this.world.getBlockState(new BlockPos((int)Math.ceil(this.posX), (int)Math.ceil(this.posY),
+                        (int)Math.ceil(this.posZ)))));
                 if (this.posY > d0) {
-                    this.setDead();
+                    this.setExpired();
                 }
             }
         }

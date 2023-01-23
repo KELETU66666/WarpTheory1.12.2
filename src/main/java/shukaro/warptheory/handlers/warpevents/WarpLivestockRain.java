@@ -1,17 +1,21 @@
 package shukaro.warptheory.handlers.warpevents;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
+
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.StatCollector;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.FormatCodes;
@@ -43,7 +47,7 @@ public class WarpLivestockRain extends IWarpEvent
     @Override
     public boolean doEvent(World world, EntityPlayer player)
     {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + StatCollector.translateToLocal("chat.warptheory.livestock"));
+        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.livestock"));
         MiscHelper.modEventInt(player, getName(), 5 + world.rand.nextInt(10));
         return true;
     }
@@ -67,7 +71,7 @@ public class WarpLivestockRain extends IWarpEvent
                     boolean canDrop = true;
                     for (int y = targetY; y < targetY + 25; y++)
                     {
-                        if (!e.world.isAirBlock(targetX, y, targetZ))
+                        if (!e.world.isAirBlock(new BlockPos(targetX, y, targetZ)))
                         {
                             canDrop = false;
                             break;
@@ -76,7 +80,7 @@ public class WarpLivestockRain extends IWarpEvent
                     if (!canDrop)
                         continue;
                     targetY += 25;
-                    if (e.world.isAirBlock(targetX, targetY, targetZ))
+                    if (e.world.isAirBlock(new BlockPos(targetX, targetY, targetZ)))
                     {
                         EntityLiving victim;
                         switch (e.world.rand.nextInt(3))
@@ -96,7 +100,7 @@ public class WarpLivestockRain extends IWarpEvent
                         }
                         victim.playLivingSound();
                         victim.setLocationAndAngles((double)targetX + e.world.rand.nextDouble(), (double)targetY + e.world.rand.nextDouble(), (double)targetZ + e.world.rand.nextDouble(), e.world.rand.nextFloat(), e.world.rand.nextFloat());
-                        if (e.world.spawnEntityInWorld(victim))
+                        if (e.world.spawnEntity(victim))
                         {
                             MiscHelper.getWarpTag(player).setInteger("livestock", --livestock);
                             if (livestock <= 0)

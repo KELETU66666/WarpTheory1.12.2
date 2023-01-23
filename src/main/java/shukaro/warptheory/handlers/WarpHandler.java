@@ -5,14 +5,21 @@ import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.potion.Potion;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.text.ITextComponent;
 import shukaro.warptheory.WarpTheory;
 import shukaro.warptheory.handlers.warpevents.*;
 import shukaro.warptheory.util.MiscHelper;
 import shukaro.warptheory.util.NameMetaPair;
-import thaumcraft.api.IWarpingGear;
+import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.capabilities.IPlayerWarp;
+import thaumcraft.api.capabilities.ThaumcraftCapabilities;
+import thaumcraft.api.items.IWarpingGear;
+import thaumcraft.common.lib.events.PlayerEvents;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,13 +59,13 @@ public class WarpHandler
     	if(ConfigHandler.allowWarpEffect2)
     		warpEvents.add(new WarpBlink(ConfigHandler.minimumWarpForEffect2));
     	if(ConfigHandler.allowWarpEffect3)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect3, "poison", new PotionEffect(Potion.poison.id, 20 * 20)));
+    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect3, "poison", new PotionEffect(MobEffects.POISON, 20 * 20)));
     	if(ConfigHandler.allowWarpEffect4)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect4, "nausea", new PotionEffect(Potion.confusion.id, 20 * 20)));
+    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect4, "nausea", new PotionEffect(MobEffects.NAUSEA, 20 * 20)));
     	if(ConfigHandler.allowWarpEffect5)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect5, "jump", new PotionEffect(Potion.jump.id, 20 * 20, 20)));
+    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect5, "jump", new PotionEffect(MobEffects.JUMP_BOOST, 20 * 20, 20)));
     	if(ConfigHandler.allowWarpEffect6)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect6, "blind", new PotionEffect(Potion.blindness.id, 20 * 20)));
+    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect6, "blind", new PotionEffect(MobEffects.BLINDNESS, 20 * 20)));
     	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect7)
     		warpEvents.add(new WarpDecay(ConfigHandler.minimumWarpForEffect7));
     	if(ConfigHandler.allowWarpEffect8)
@@ -81,54 +88,54 @@ public class WarpHandler
     		warpEvents.add(new WarpAcceleration(ConfigHandler.minimumWarpForEffect16));
     	if(ConfigHandler.allowWarpEffect17)
     		warpEvents.add(new WarpLightning(ConfigHandler.minimumWarpForEffect17));
-    	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect18 && ConfigHandler.allowServerKickWarpEffects)
-    		warpEvents.add(new WarpFall(ConfigHandler.minimumWarpForEffect18));
+ //   	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect18 && ConfigHandler.allowServerKickWarpEffects)
+ //   		warpEvents.add(new WarpFall(ConfigHandler.minimumWarpForEffect18));
     	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect19)
     		warpEvents.add(new WarpRain(ConfigHandler.minimumWarpForEffect19));
     	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect20)
     		warpEvents.add(new WarpWither(ConfigHandler.minimumWarpForEffect20));
     	if(ConfigHandler.allowWarpEffect21)
-    		warpEvents.add(new WarpFakeSound(ConfigHandler.minimumWarpForEffect21, "fakeexplosion", "random.explode", 8));
+    		warpEvents.add(new WarpFakeSound(ConfigHandler.minimumWarpForEffect21, "fakeexplosion", SoundEvents.ENTITY_GENERIC_EXPLODE, 8));
     	if(ConfigHandler.allowWarpEffect22)
     		warpEvents.add(new WarpFakeSoundBehind(ConfigHandler.minimumWarpForEffect22, "fakecreeper", "creeper.primed", 2));
 
-        addDecayMapping(Blocks.grass, Blocks.dirt);
-        addDecayMapping(Blocks.dirt, 0, Blocks.sand);
-        addDecayMapping(Blocks.dirt, 1, Blocks.sand);
-        addDecayMapping(Blocks.dirt, 2, Blocks.dirt);
-        addDecayMapping(Blocks.stone, Blocks.cobblestone);
-        addDecayMapping(Blocks.cobblestone, Blocks.gravel);
-        addDecayMapping(Blocks.sandstone, Blocks.sand);
-        addDecayMapping(Blocks.gravel, Blocks.sand);
-        addDecayMapping(Blocks.sand, Blocks.air);
-        addDecayMapping(Blocks.lava, Blocks.cobblestone);
-        addDecayMapping(Blocks.flowing_lava, Blocks.cobblestone);
-        addDecayMapping(Blocks.water, Blocks.air);
-        addDecayMapping(Blocks.snow, Blocks.water);
-        addDecayMapping(Blocks.snow_layer, Blocks.air);
-        addDecayMapping(Blocks.ice, Blocks.water);
-        addDecayMapping(Blocks.clay, Blocks.sand);
-        addDecayMapping(Blocks.mycelium, Blocks.grass);
-        addDecayMapping(Blocks.stained_hardened_clay, Blocks.hardened_clay);
-        addDecayMapping(Blocks.hardened_clay, Blocks.clay);
-        addDecayMapping(Blocks.coal_ore, Blocks.stone);
-        addDecayMapping(Blocks.diamond_ore, Blocks.stone);
-        addDecayMapping(Blocks.emerald_ore, Blocks.stone);
-        addDecayMapping(Blocks.gold_ore, Blocks.stone);
-        addDecayMapping(Blocks.iron_ore, Blocks.stone);
-        addDecayMapping(Blocks.lapis_ore, Blocks.stone);
-        addDecayMapping(Blocks.lit_redstone_ore, Blocks.stone);
-        addDecayMapping(Blocks.redstone_ore, Blocks.stone);
-        addDecayMapping(Blocks.quartz_ore, Blocks.netherrack);
-        addDecayMapping(Blocks.netherrack, Blocks.cobblestone);
-        addDecayMapping(Blocks.soul_sand, Blocks.sand);
-        addDecayMapping(Blocks.glowstone, Blocks.cobblestone);
-        addDecayMapping(Blocks.log, Blocks.dirt);
-        addDecayMapping(Blocks.log2, Blocks.dirt);
-        addDecayMapping(Blocks.brown_mushroom_block, Blocks.dirt);
-        addDecayMapping(Blocks.red_mushroom_block, Blocks.dirt);
-        addDecayMapping(Blocks.end_stone, Blocks.cobblestone);
-        addDecayMapping(Blocks.obsidian, Blocks.cobblestone);
+        addDecayMapping(Blocks.GRASS, Blocks.DIRT);
+        addDecayMapping(Blocks.DIRT, 0, Blocks.SAND);
+        addDecayMapping(Blocks.DIRT, 1, Blocks.SAND);
+        addDecayMapping(Blocks.DIRT, 2, Blocks.DIRT);
+        addDecayMapping(Blocks.STONE, Blocks.COBBLESTONE);
+        addDecayMapping(Blocks.COBBLESTONE, Blocks.GRAVEL);
+        addDecayMapping(Blocks.SANDSTONE, Blocks.SAND);
+        addDecayMapping(Blocks.GRAVEL, Blocks.SAND);
+        addDecayMapping(Blocks.SAND, Blocks.AIR);
+        addDecayMapping(Blocks.LAVA, Blocks.COBBLESTONE);
+        addDecayMapping(Blocks.FLOWING_LAVA, Blocks.COBBLESTONE);
+        addDecayMapping(Blocks.WATER, Blocks.AIR);
+        addDecayMapping(Blocks.SNOW, Blocks.WATER);
+        addDecayMapping(Blocks.SNOW_LAYER, Blocks.AIR);
+        addDecayMapping(Blocks.ICE, Blocks.WATER);
+        addDecayMapping(Blocks.CLAY, Blocks.SAND);
+        addDecayMapping(Blocks.MYCELIUM, Blocks.GRASS);
+        addDecayMapping(Blocks.STAINED_HARDENED_CLAY, Blocks.HARDENED_CLAY);
+        addDecayMapping(Blocks.HARDENED_CLAY, Blocks.CLAY);
+        addDecayMapping(Blocks.COAL_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.DIAMOND_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.EMERALD_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.GOLD_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.IRON_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.LAPIS_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.LIT_REDSTONE_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.REDSTONE_ORE, Blocks.STONE);
+        addDecayMapping(Blocks.QUARTZ_ORE, Blocks.NETHERRACK);
+        addDecayMapping(Blocks.NETHERRACK, Blocks.COBBLESTONE);
+        addDecayMapping(Blocks.SOUL_SAND, Blocks.SAND);
+        addDecayMapping(Blocks.GLOWSTONE, Blocks.COBBLESTONE);
+        addDecayMapping(Blocks.LOG, Blocks.DIRT);
+        addDecayMapping(Blocks.LOG2, Blocks.DIRT);
+        addDecayMapping(Blocks.BROWN_MUSHROOM_BLOCK, Blocks.DIRT);
+        addDecayMapping(Blocks.RED_MUSHROOM_BLOCK, Blocks.DIRT);
+        addDecayMapping(Blocks.END_STONE, Blocks.COBBLESTONE);
+        addDecayMapping(Blocks.OBSIDIAN, Blocks.COBBLESTONE);
     }
 
     @SuppressWarnings("unchecked")
@@ -185,38 +192,38 @@ public class WarpHandler
     {
         if (amount <= 0)
             return;
-        if ((warpNormal != null && warpTemp != null) || tcReflect())
+        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 && ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
         {
-            String name = player.getDisplayName();
-            int wp = warpPermanent != null ? warpPermanent.get(name) : 0;
-            int wn = warpNormal.get(name);
-            int wt = warpTemp.get(name);
+            String name = player.getDisplayName().toString();
+            int wp = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) != 0 ? ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) : 0;
+            int wn = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL);
+            int wt = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY);
             if (amount <= wt)
             {
-                warpTemp.put(name, wt - amount);
+                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - (wt - amount), IPlayerWarp.EnumWarpType.TEMPORARY);
                 return;
             }
             else
             {
-                warpTemp.put(name, 0);
+                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - wt, IPlayerWarp.EnumWarpType.TEMPORARY);
                 amount -= wt;
             }
             if (amount <= wn)
             {
-                warpNormal.put(name, wn - amount);
+                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - (wn - amount), IPlayerWarp.EnumWarpType.NORMAL);
                 return;
             }
             else
             {
-                warpNormal.put(name, 0);
+                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - wn, IPlayerWarp.EnumWarpType.NORMAL);
                 amount -= wn;
             }
             if (ConfigHandler.allowPermWarpRemoval)
             {
                 if ((int)Math.ceil(amount / ConfigHandler.permWarpMult) <= wp)
-                    warpPermanent.put(name, wp - (int)Math.ceil(amount / ConfigHandler.permWarpMult));
+                    ThaumcraftApi.internalMethods.addWarpToPlayer(player, - (wp - (int)Math.ceil(amount / ConfigHandler.permWarpMult)), IPlayerWarp.EnumWarpType.PERMANENT);
                 else
-                    warpPermanent.put(name, 0);
+                    ThaumcraftApi.internalMethods.addWarpToPlayer(player, - wp, IPlayerWarp.EnumWarpType.PERMANENT);
             }
         }
     }
@@ -225,25 +232,17 @@ public class WarpHandler
     {
         if (player == null)
             return 0;
-        if ((warpNormal != null && warpTemp != null) || tcReflect())
+        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 && ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
         {
-            return ((warpPermanent != null && warpPermanent.get(player.getDisplayName()) != null) ? warpPermanent.get(player.getDisplayName()) : 0) * ConfigHandler.permWarpMult +
-                    (warpNormal.get(player.getDisplayName()) != null ? warpNormal.get(player.getDisplayName()) : 0) +
-                    (warpTemp.get(player.getDisplayName()) != null ? warpTemp.get(player.getDisplayName()) : 0) +
+            return ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) + ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) + ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) +
                     getWarpFromGear(player);
         }
         return 0;
     }
 
-    public static int[] getIndividualWarps(EntityPlayer player)
-    {
-        int[] totals = new int[3];
-        if ((warpNormal != null && warpTemp != null) || tcReflect())
-        {
-            totals[0] = warpPermanent != null ? warpPermanent.get(player.getDisplayName()) : 0;
-            totals[1] = warpNormal.get(player.getDisplayName());
-            totals[2] = warpTemp.get(player.getDisplayName());
-        }
+    public static int[] getIndividualWarps(EntityPlayer player) {
+        IPlayerWarp warp = ThaumcraftCapabilities.getWarp(player);
+        int[] totals = new int[]{ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT), warp.get(IPlayerWarp.EnumWarpType.NORMAL), warp.get(IPlayerWarp.EnumWarpType.TEMPORARY)};
         return totals;
     }
 
@@ -280,19 +279,19 @@ public class WarpHandler
         return null;
     }
 
-    public static int getWarpFromGear(EntityPlayer player)
-    {
-        int w = 0;
-        if (player.getCurrentEquippedItem() != null && player.getCurrentEquippedItem().getItem() instanceof IWarpingGear)
-            w += ((IWarpingGear)player.getCurrentEquippedItem().getItem()).getWarp(player.getCurrentEquippedItem(), player);
-        IInventory baubles = BaublesApi.getBaubles(player);
-        for (int i = 0; i < 4; i++)
-        {
-            if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).getItem() instanceof IWarpingGear)
-                w += ((IWarpingGear)player.inventory.getStackInSlot(i).getItem()).getWarp(player.inventory.getStackInSlot(i), player);
-            if (baubles != null && baubles.getStackInSlot(i) != null && baubles.getStackInSlot(i).getItem() instanceof IWarpingGear)
-                w += ((IWarpingGear)baubles.getStackInSlot(i).getItem()).getWarp(baubles.getStackInSlot(i), player);
+    private static int getWarpFromGear(EntityPlayer player) {
+        int w = PlayerEvents.getFinalWarp(player.getHeldItemMainhand(), player);
+
+        for(int a = 0; a < 4; ++a) {
+            w += PlayerEvents.getFinalWarp((ItemStack)player.inventory.armorInventory.get(a), player);
         }
+
+        IInventory baubles = BaublesApi.getBaubles(player);
+
+        for(int a = 0; a < baubles.getSizeInventory(); ++a) {
+            w += PlayerEvents.getFinalWarp(baubles.getStackInSlot(a), player);
+        }
+
         return w;
     }
 
@@ -330,7 +329,7 @@ public class WarpHandler
             for (String n : queue.split(" "))
                 names.add(n);
             Collections.shuffle(names);
-            String todo = names.remove(player.worldObj.rand.nextInt(names.size()));
+            String todo = names.remove(player.world.rand.nextInt(names.size()));
             queue = "";
             for (String n : names)
                 queue += n + " ";
