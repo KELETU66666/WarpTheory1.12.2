@@ -1,6 +1,6 @@
 
 # << creative tab name >>
-tc.research_category.WARPTHEORY=Warp Theory
+itemGroup.warptheory.tab=Warp Theory
 
 # << chat item effects >>
 chat.warptheory.purge=You've got a bad feeling about this...
@@ -69,4 +69,4 @@ chat.warptheory.rain=You hear a rumble in the distance...
 chat.warptheory.wither=You feel overwhelmed with dread...
 
 # << Research stuff >>
-tc.research_category.WT_Category=Warp Theory
+tc.research_category.WARPTHEORY=Warp Theory
