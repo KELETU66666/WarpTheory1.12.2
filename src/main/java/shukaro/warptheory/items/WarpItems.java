@@ -9,6 +9,7 @@ public class WarpItems
     public static Item itemAmulet;
     public static Item itemSomething;
     public static Item itemPaper;
+    public static Item itemCleanserMinor;
 
     public static void initItems()
     {
@@ -20,5 +21,7 @@ public class WarpItems
         ForgeRegistries.ITEMS.register(itemSomething);
         itemPaper = new ItemPaper();
         ForgeRegistries.ITEMS.register(itemPaper);
+        itemCleanserMinor = new ItemCleanserMinor();
+        ForgeRegistries.ITEMS.register(itemCleanserMinor);
     }
 }

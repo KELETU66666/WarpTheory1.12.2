@@ -2,20 +2,15 @@ package shukaro.warptheory.items;
 
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import shukaro.warptheory.WarpTheory;
@@ -23,16 +18,9 @@ import shukaro.warptheory.handlers.WarpHandler;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.Constants;
 import shukaro.warptheory.util.FormatCodes;
-import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.InfusionRecipe;
-import thaumcraft.api.items.ItemsTC;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import static shukaro.warptheory.items.WarpItems.itemCleanser;
 
 public class ItemCleanser extends ItemFood
 {
@@ -43,7 +31,6 @@ public class ItemCleanser extends ItemFood
         this.setHasSubtypes(true);
         this.setMaxStackSize(16);
         this.setMaxDamage(0);
-        this.setCreativeTab(WarpTheory.mainTab);
         this.setUnlocalizedName(Constants.ITEM_WARPCLEANSER);
         this.setAlwaysEdible();
         this.setRegistryName("item_cleanser");

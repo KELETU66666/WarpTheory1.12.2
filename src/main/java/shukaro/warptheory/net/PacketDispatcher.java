@@ -24,6 +24,14 @@ public class PacketDispatcher
         }
     }
 
+    public static void sendFakeRainEvent(EntityPlayer player, int eventLevel) {
+        try {
+            sendToPlayer(new FakeRainPacket(eventLevel), player);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void sendWindEvent(EntityPlayer player, double x, double y, double z)
     {
         try
@@ -36,14 +44,10 @@ public class PacketDispatcher
         }
     }
 
-    public static void sendBloodEvent(EntityPlayer player, int x, int y, int z)
-    {
-        try
-        {
-            sendToPlayer(new BloodPacket(player.world.provider.getDimension(), x, y, z), player);
-        }
-        catch (Exception e)
-        {
+    public static void sendBloodEvent(EntityPlayer player, int eventLevel, int x, int y, int z) {
+        try {
+            sendToPlayer(new BloodPacket(player.world.provider.getDimension(), eventLevel, x, y, z), player);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

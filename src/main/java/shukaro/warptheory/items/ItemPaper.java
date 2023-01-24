@@ -2,16 +2,12 @@ package shukaro.warptheory.items;
 
 
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -22,14 +18,10 @@ import shukaro.warptheory.WarpTheory;
 import shukaro.warptheory.util.Constants;
 import shukaro.warptheory.util.FormatCodes;
 import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.ShapedArcaneRecipe;
-import thaumcraft.api.items.ItemsTC;
 
 import java.util.List;
 
 import static shukaro.warptheory.handlers.WarpHandler.getIndividualWarps;
-import static shukaro.warptheory.items.WarpItems.itemPaper;
 
 public class ItemPaper extends Item
 {
@@ -39,7 +31,6 @@ public class ItemPaper extends Item
         this.setHasSubtypes(true);
         this.setMaxStackSize(64);
         this.setMaxDamage(0);
-        this.setCreativeTab(WarpTheory.mainTab);
         this.setUnlocalizedName(Constants.ITEM_LITMUS);
         this.setRegistryName("item_warppaper");
         this.setCreativeTab(WarpTheory.mainTab);

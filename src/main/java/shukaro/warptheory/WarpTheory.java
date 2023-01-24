@@ -13,7 +13,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import org.apache.logging.log4j.Logger;
-import shukaro.warptheory.block.WarpBlocks;
+import shukaro.warptheory.entity.EntityDoppelganger;
+import shukaro.warptheory.entity.EntityFakeCreeper;
 import shukaro.warptheory.entity.EntityPassiveCreeper;
 import shukaro.warptheory.gui.WarpTab;
 import shukaro.warptheory.handlers.ConfigHandler;
@@ -86,6 +87,8 @@ public class WarpTheory {
         InitRecipes.initRecipes();
         InitResearch.registerResearch();
         EntityRegistry.registerModEntity(new ResourceLocation(Constants.modID + ":" + "passive_creeper"), EntityPassiveCreeper.class, "creeperPassive", 0, this, 160, 4, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Constants.modID + ":" + "fake_creeper"), EntityFakeCreeper.class, "creeperFake", 1, this, 160, 4, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Constants.modID + ":" + "doppelganger"), EntityDoppelganger.class, "doppelganger", 2, this, 160, 4, true);
         proxy.init();
     }
 

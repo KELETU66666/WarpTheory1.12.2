@@ -1,14 +1,5 @@
 package shukaro.warptheory.gui;
 
-import net.minecraftforge.common.config.ConfigElement;
-import net.minecraft.client.gui.GuiScreen;
-import shukaro.warptheory.WarpTheory;
-import shukaro.warptheory.handlers.ConfigHandler;
-import shukaro.warptheory.util.Constants;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by Ark on 3/8/2015.
  */

@@ -17,4 +17,5 @@ public class Constants {
     public static final String ITEM_PURE_TALISMAN = "warptheory.amulet";
     public static final String ITEM_SOMETHING = "warptheory.something";
     public static final String ITEM_LITMUS = "warptheory.paper";
+    public static final String ITEM_WARPCLEANSERMINOR = "warptheory.cleanserminor";
 }

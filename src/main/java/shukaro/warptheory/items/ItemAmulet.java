@@ -3,17 +3,13 @@ package shukaro.warptheory.items;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import shukaro.warptheory.WarpTheory;
@@ -21,17 +17,9 @@ import shukaro.warptheory.handlers.IWarpEvent;
 import shukaro.warptheory.handlers.WarpHandler;
 import shukaro.warptheory.util.Constants;
 import shukaro.warptheory.util.FormatCodes;
-import thaumcraft.api.ThaumcraftApi;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.aspects.AspectList;
-import thaumcraft.api.crafting.InfusionRecipe;
-import thaumcraft.api.items.ItemsTC;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import static shukaro.warptheory.items.WarpItems.itemAmulet;
-import static shukaro.warptheory.items.WarpItems.itemCleanser;
 
 public class ItemAmulet extends Item implements IBauble
 {
@@ -41,7 +29,6 @@ public class ItemAmulet extends Item implements IBauble
         this.setHasSubtypes(true);
         this.setMaxStackSize(1);
         this.setMaxDamage(0);
-        this.setCreativeTab(WarpTheory.mainTab);
         this.setUnlocalizedName(Constants.ITEM_PURE_TALISMAN);
         this.setRegistryName("item_cleansing_amulet");
         this.setCreativeTab(WarpTheory.mainTab);

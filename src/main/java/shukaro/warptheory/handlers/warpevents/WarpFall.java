@@ -1,118 +1,76 @@
 package shukaro.warptheory.handlers.warpevents;
 
 
-
 import net.minecraft.entity.player.EntityPlayer;
-
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import shukaro.warptheory.WarpTheory;
-import shukaro.warptheory.block.WarpBlocks;
-import shukaro.warptheory.handlers.ConfigHandler;
 import shukaro.warptheory.handlers.IWarpEvent;
-import shukaro.warptheory.net.PacketDispatcher;
-// import shukaro.warptheory.tile.TileEntityVanish;
 import shukaro.warptheory.util.BlockCoord;
-import shukaro.warptheory.util.ChatHelper;
-import shukaro.warptheory.util.FormatCodes;
 import shukaro.warptheory.util.MiscHelper;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class WarpFall extends IWarpEvent
-{
-	private final int _mMinWarpLevel;
+
+public class WarpFall extends IWarpEvent {
     private static Map<String, BlockCoord> originalPositions = new HashMap<String, BlockCoord>();
     private static Map<String, Long> returnTimes = new HashMap<String, Long>();
 
-    public WarpFall(int pMinWarpLevel)
-    {
-    	_mMinWarpLevel = pMinWarpLevel;
+    public WarpFall(int minWarp) {
+        super("fall", minWarp);
         FMLCommonHandler.instance().bus().register(this);
     }
 
-    @Override
-    public String getName()
-    {
-        return "fall";
-    }
+    //@Override
+    // public boolean canDo(World world, EntityPlayer player) {
+    //     if (originalPositions.get(player.getCommandSenderName()) != null) return false;
+    //     return true;
+    // }
 
     @Override
-    public int getSeverity()
-    {
-    	return _mMinWarpLevel;
-    }
-
-    @Override
-    public boolean canDo(EntityPlayer player)
-    {
-        if (originalPositions.get(player.getName()) != null)
-            return false;
+    public boolean doEvent(World world, EntityPlayer player) {
+        sendChatMessage(player);
+        MiscHelper.modEventInt(player, name, 4);
         return true;
     }
 
-    @Override
-    public boolean doEvent(World world, EntityPlayer player)
-    {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.fall"));
-        MiscHelper.modEventInt(player, "fall", 4);
-        return true;
-    }
-
-    //   @SubscribeEvent
-    //   public void onTick(TickEvent.WorldTickEvent e)
-    //   {
-    //      if (e.phase != TickEvent.Phase.END || e.side != Side.SERVER || ConfigHandler.allowGlobalWarpEffects == false)
-        //          return;
-    //     for (EntityPlayer player : (ArrayList<EntityPlayer>)e.world.playerEntities)
-    //     {
-            //         if (MiscHelper.getWarpTag(player).hasKey("fall"))
-    //       {
-    //         if (!originalPositions.containsKey(player.getName()))
-    //          {
-                        //               int fall = MiscHelper.getWarpTag(player).getInteger("fall");
-                        //               originalPositions.put(player.getName(), new BlockCoord((int)player.posX, (int)player.posY, (int)player.posZ));
-                        //              returnTimes.put(player.getName(), e.world.getTotalWorldTime() + fall * 20);
-    //               e.world.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
-    //         for (int i = (int)player.posX - 5; i < player.posX + 5; i++)
-    //        {
-                        //            for (int j = 0; j < e.world.getHeight(); j++)
-    //          {
-    //             for (int k = (int)player.posZ - 5; k < player.posZ + 5; k++)
-        //            {
-    //               if (!e.world.isAirBlock(new BlockPos(i, j, k)))
-    //                {
-    //                  TileEntityVanish vanish = new TileEntityVanish(e.world, i, j, k, returnTimes.get(player.getName()));
-    //                  if (e.world.setBlockState(new BlockPos(i, j, k), WarpBlocks.blockVanish.getDefaultState(), 0))
-    //                      e.world.setTileEntity(new BlockPos(i, j, k), vanish);
-    //                  e.world.notifyBlockUpdate(new BlockPos(i, j, k), WarpBlocks.blockVanish.getDefaultState(), WarpBlocks.blockVanish.getDefaultState(), 0);
-    //             }
-    //            }
-    //        }
-                        //              }
-                        //          }
-                //          else if (e.world.getTotalWorldTime() >= returnTimes.get(player.getName()))
-                //          {
-                    //              BlockCoord o = originalPositions.get(player.getName());
-                    //                double dx = o.x + e.world.rand.nextDouble();
-                    //                double dz = o.z + e.world.rand.nextDouble();
-                    //               player.setPositionAndUpdate(dx, o.y, dz);
-                    //                 PacketDispatcher.sendBlinkEvent(e.world, dx, o.y, dz);
-                    //                 e.world.playSound(dx, o.y, dz, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
-                    //                 MiscHelper.getWarpTag(player).removeTag("fall");
-                    //               originalPositions.remove(player.getName());
-                    //                 returnTimes.remove(player.getName());
-//                }
-//            }
-//        }
-//    }
+ //   @SubscribeEvent
+  //  public void onTick(TickEvent.WorldTickEvent e) {
+  //      if (e.phase != TickEvent.Phase.END || e.side != Side.SERVER) return;
+  //      for (EntityPlayer player : (ArrayList<EntityPlayer>) e.world.playerEntities) {
+   //         if (MiscHelper.getWarpTag(player).hasKey(name)) {
+   //             if (!originalPositions.containsKey(player.getCommandSenderName())) {
+  //                  int fall = MiscHelper.getWarpTag(player).getInteger(name);
+    //                 originalPositions.put(
+  //                          player.getCommandSenderName(),
+//                            new BlockCoord((int) player.posX, (int) player.posY, (int) player.posZ));
+    //                  returnTimes.put(player.getCommandSenderName(), e.world.getTotalWorldTime() + fall * 20);
+    //              e.world.playSoundEffect(player.posX, player.posY, player.posZ, "mob.endermen.portal", 1.0F, 1.0F);
+    //              for (int i = (int) player.posX - 5; i < player.posX + 5; i++) {
+    //                  for (int j = 0; j < e.world.getHeight(); j++) {
+    //                      for (int k = (int) player.posZ - 5; k < player.posZ + 5; k++) {
+ //                          if (!e.world.isAirBlock(i, j, k)) {
+    //                                 TileEntityVanish vanish = new TileEntityVanish(
+    //                                      e.world, i, j, k, returnTimes.get(player.getCommandSenderName()));
+    //                              if (e.world.setBlock(i, j, k, WarpBlocks.blockVanish, 0, 0))
+    //                                  e.world.setTileEntity(i, j, k, vanish);
+    //                              e.world.markBlockForUpdate(i, j, k);
+    //                          }
+    //                      }
+    //                  }
+    //              }
+ //          } else if (e.world.getTotalWorldTime() >= returnTimes.get(player.getCommandSenderName())) {
+ //                 BlockCoord o = originalPositions.get(player.getCommandSenderName());
+ //                 double dx = o.x + e.world.rand.nextDouble();
+    //                 double dz = o.z + e.world.rand.nextDouble();
+    //              player.setPositionAndUpdate(dx, o.y, dz);
+    //              PacketDispatcher.sendBlinkEvent(e.world, dx, o.y, dz);
+    //              e.world.playSoundEffect(dx, o.y, dz, "mob.endermen.portal", 1.0F, 1.0F);
+    //              MiscHelper.getWarpTag(player).removeTag(name);
+    //              originalPositions.remove(player.getCommandSenderName());
+    //              returnTimes.remove(player.getCommandSenderName());
+    //          }
+    //      }
+    //  }
+    //  }
 }

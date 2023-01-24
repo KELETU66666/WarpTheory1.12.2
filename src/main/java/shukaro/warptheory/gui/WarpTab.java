@@ -1,7 +1,6 @@
 package shukaro.warptheory.gui;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import shukaro.warptheory.items.WarpItems;
 

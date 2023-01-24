@@ -5,25 +5,19 @@ import gnu.trove.map.hash.THashMap;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.translation.I18n;
 import shukaro.warptheory.WarpTheory;
-import shukaro.warptheory.handlers.warpevents.*;
+import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.MiscHelper;
 import shukaro.warptheory.util.NameMetaPair;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
-import thaumcraft.api.items.IWarpingGear;
 import thaumcraft.common.lib.events.PlayerEvents;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 public class WarpHandler
 {
@@ -31,6 +25,7 @@ public class WarpHandler
     public static Map<String, Integer> warpTemp;
     public static Map<String, Integer> warpPermanent;
     public static boolean wuss = false;
+    private static HashMap<UUID, Integer> Unavoidable = new HashMap<UUID, Integer>();
     public static int potionWarpWardID = -1;
 
     public static ArrayList<IWarpEvent> warpEvents = new ArrayList<IWarpEvent>();
@@ -54,50 +49,7 @@ public class WarpHandler
 
     public static void initEvents()
     {
-    	if(ConfigHandler.allowWarpEffect1)
-    		warpEvents.add(new WarpBats(ConfigHandler.minimumWarpForEffect1));
-    	if(ConfigHandler.allowWarpEffect2)
-    		warpEvents.add(new WarpBlink(ConfigHandler.minimumWarpForEffect2));
-    	if(ConfigHandler.allowWarpEffect3)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect3, "poison", new PotionEffect(MobEffects.POISON, 20 * 20)));
-    	if(ConfigHandler.allowWarpEffect4)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect4, "nausea", new PotionEffect(MobEffects.NAUSEA, 20 * 20)));
-    	if(ConfigHandler.allowWarpEffect5)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect5, "jump", new PotionEffect(MobEffects.JUMP_BOOST, 20 * 20, 20)));
-    	if(ConfigHandler.allowWarpEffect6)
-    		warpEvents.add(new WarpBuff(ConfigHandler.minimumWarpForEffect6, "blind", new PotionEffect(MobEffects.BLINDNESS, 20 * 20)));
-    	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect7)
-    		warpEvents.add(new WarpDecay(ConfigHandler.minimumWarpForEffect7));
-    	if(ConfigHandler.allowWarpEffect8)
-    		warpEvents.add(new WarpEars(ConfigHandler.minimumWarpForEffect8));
-    	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect9)
-    		warpEvents.add(new WarpSwamp(ConfigHandler.minimumWarpForEffect9));
-    	if(ConfigHandler.allowWarpEffect10)
-    		warpEvents.add(new WarpTongue(ConfigHandler.minimumWarpForEffect10));
-    	if(ConfigHandler.allowWarpEffect11)
-    		warpEvents.add(new WarpFriend(ConfigHandler.minimumWarpForEffect11));
-    	if(ConfigHandler.allowWarpEffect12)
-    		warpEvents.add(new WarpLivestockRain(ConfigHandler.minimumWarpForEffect12));
-    	if(ConfigHandler.allowWarpEffect13)
-    		warpEvents.add(new WarpWind(ConfigHandler.minimumWarpForEffect13));
-    	if(ConfigHandler.allowWarpEffect14)
-    		warpEvents.add(new WarpChests(ConfigHandler.minimumWarpForEffect14));
-    	if(ConfigHandler.allowWarpEffect15)
-    		warpEvents.add(new WarpBlood(ConfigHandler.minimumWarpForEffect15));
-    	if(ConfigHandler.allowWarpEffect16)
-    		warpEvents.add(new WarpAcceleration(ConfigHandler.minimumWarpForEffect16));
-    	if(ConfigHandler.allowWarpEffect17)
-    		warpEvents.add(new WarpLightning(ConfigHandler.minimumWarpForEffect17));
- //   	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect18 && ConfigHandler.allowServerKickWarpEffects)
- //   		warpEvents.add(new WarpFall(ConfigHandler.minimumWarpForEffect18));
-    	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect19)
-    		warpEvents.add(new WarpRain(ConfigHandler.minimumWarpForEffect19));
-    	if(ConfigHandler.allowGlobalWarpEffects && ConfigHandler.allowWarpEffect20)
-    		warpEvents.add(new WarpWither(ConfigHandler.minimumWarpForEffect20));
-    	if(ConfigHandler.allowWarpEffect21)
-    		warpEvents.add(new WarpFakeSound(ConfigHandler.minimumWarpForEffect21, "fakeexplosion", SoundEvents.ENTITY_GENERIC_EXPLODE, 8));
-    	if(ConfigHandler.allowWarpEffect22)
-    		warpEvents.add(new WarpFakeSoundBehind(ConfigHandler.minimumWarpForEffect22, "fakecreeper", "creeper.primed", 2));
+        Arrays.stream(WarpEventRegistry.values()).forEach(warpEvent -> warpEvent.createWarpEvent(warpEvents::add));
 
         addDecayMapping(Blocks.GRASS, Blocks.DIRT);
         addDecayMapping(Blocks.DIRT, 0, Blocks.SAND);
@@ -188,6 +140,14 @@ public class WarpHandler
         removeWarp(player, getTotalWarp(player));
     }
 
+    public static void purgeWarpMinor(EntityPlayer player) {
+        int[] warp = getIndividualWarps(player);
+        if (warp[0] + warp[1] + warp[2] >= 50) {
+            removeWarp(player, 5);
+            ChatHelper.sendToPlayer(player, I18n.translateToLocal("chat.warptheory.purgeminor"));
+        } else ChatHelper.sendToPlayer(player, I18n.translateToLocal("chat.warptheory.purgefailed"));
+    }
+
     public static void removeWarp(EntityPlayer player, int amount)
     {
         if (amount <= 0)
@@ -200,7 +160,7 @@ public class WarpHandler
             int wt = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY);
             if (amount <= wt)
             {
-                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - (wt - amount), IPlayerWarp.EnumWarpType.TEMPORARY);
+                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - amount, IPlayerWarp.EnumWarpType.TEMPORARY);
                 return;
             }
             else
@@ -210,7 +170,7 @@ public class WarpHandler
             }
             if (amount <= wn)
             {
-                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - (wn - amount), IPlayerWarp.EnumWarpType.NORMAL);
+                ThaumcraftApi.internalMethods.addWarpToPlayer(player, - amount, IPlayerWarp.EnumWarpType.NORMAL);
                 return;
             }
             else
@@ -232,7 +192,7 @@ public class WarpHandler
     {
         if (player == null)
             return 0;
-        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 && ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
+        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 || ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
         {
             return ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) + ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) + ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) +
                     getWarpFromGear(player);
@@ -337,5 +297,26 @@ public class WarpHandler
             return getEventFromName(todo);
         }
         return null;
+    }
+
+    public static void setUnavoidableCount(EntityPlayer player, int count) {
+        if (ConfigHandler.disableRebound) return;
+        UUID uuid = player.getUniqueID();
+        Unavoidable.put(uuid, Math.max(0, count));
+    }
+
+    public static void addUnavoidableCount(EntityPlayer player, int count) {
+        if (ConfigHandler.disableRebound) return;
+        UUID uuid = player.getUniqueID();
+        if (!Unavoidable.containsKey(uuid)) Unavoidable.put(uuid, 0);
+        count = Math.max(0, count + Unavoidable.get(uuid));
+        Unavoidable.put(uuid, count);
+    }
+
+    public static int getUnavoidableCount(EntityPlayer player) {
+        if (ConfigHandler.disableRebound) return 0;
+        UUID uuid = player.getUniqueID();
+        if (!Unavoidable.containsKey(uuid)) Unavoidable.put(uuid, 0);
+        return Unavoidable.get(uuid);
     }
 }

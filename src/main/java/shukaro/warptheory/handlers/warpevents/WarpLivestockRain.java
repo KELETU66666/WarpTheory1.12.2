@@ -1,115 +1,103 @@
 package shukaro.warptheory.handlers.warpevents;
 
 
-
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.monster.EntityEvoker;
+import net.minecraft.entity.monster.EntityIllusionIllager;
+import net.minecraft.entity.monster.EntityVindicator;
+import net.minecraft.entity.monster.EntityWitch;
+import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
-
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import shukaro.warptheory.handlers.IWarpEvent;
-import shukaro.warptheory.util.ChatHelper;
-import shukaro.warptheory.util.FormatCodes;
-import shukaro.warptheory.util.MiscHelper;
+import shukaro.warptheory.handlers.IMultiWarpEvent;
+import shukaro.warptheory.util.BlockCoord;
+import shukaro.warptheory.util.RandomBlockHelper;
 
-import java.util.ArrayList;
-
-public class WarpLivestockRain extends IWarpEvent
-{
-	private final int _mMinWarpLevel;
-    public WarpLivestockRain(int pMinWarpLevel)
-    {
-    	_mMinWarpLevel = pMinWarpLevel;
-    	FMLCommonHandler.instance().bus().register(this);
+public class WarpLivestockRain extends IMultiWarpEvent {
+    public WarpLivestockRain(int minWarp) {
+        super("livestock", minWarp, 3, world -> 5 + world.rand.nextInt(10));
     }
 
     @Override
-    public String getName()
-    {
-        return "livestock";
-    }
+    public int triggerEvent(int eventLevel, int eventAmount, World world, EntityPlayer player) {
+        int successful = 0;
+        for (int i = 0; i < 6; i++) {
+            BlockCoord target = RandomBlockHelper.randomBlock(world, player, 8, block -> isValid(world, block));
+            if (target == null) {
+                continue;
+            }
+            target.y += 25;
 
-    @Override
-    public int getSeverity()
-    {
-    	return _mMinWarpLevel;
-    }
-
-    @Override
-    public boolean doEvent(World world, EntityPlayer player)
-    {
-        ChatHelper.sendToPlayer(player, FormatCodes.Purple.code + FormatCodes.Italic.code + I18n.translateToLocal("chat.warptheory.livestock"));
-        MiscHelper.modEventInt(player, getName(), 5 + world.rand.nextInt(10));
-        return true;
-    }
-
-    @SubscribeEvent
-    public void onTick(TickEvent.WorldTickEvent e)
-    {
-        if (e.phase != TickEvent.Phase.END || e.side != Side.SERVER)
-            return;
-        // Spawning livestock
-        for (EntityPlayer player : (ArrayList<EntityPlayer>)e.world.playerEntities)
-        {
-            if (MiscHelper.getWarpTag(player).hasKey("livestock"))
-            {
-                int livestock = MiscHelper.getWarpTag(player).getInteger("livestock");
-                for (int i = 0; i < 6; i++)
-                {
-                    int targetX = (int)player.posX + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
-                    int targetY = (int)player.posY + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
-                    int targetZ = (int)player.posZ + e.world.rand.nextInt(8) - e.world.rand.nextInt(8);
-                    boolean canDrop = true;
-                    for (int y = targetY; y < targetY + 25; y++)
-                    {
-                        if (!e.world.isAirBlock(new BlockPos(targetX, y, targetZ)))
-                        {
-                            canDrop = false;
+            EntityLiving victim;
+            switch (eventLevel) {
+                case 2:
+                    switch (world.rand.nextInt(3)) {
+                        case 0:
+                            victim = new EntityIllusionIllager(world);
+                            // Tainted cows have too much health to die, so reduce their HP.
+                            victim.setHealth(20.0f);
                             break;
-                        }
-                    }
-                    if (!canDrop)
-                        continue;
-                    targetY += 25;
-                    if (e.world.isAirBlock(new BlockPos(targetX, targetY, targetZ)))
-                    {
-                        EntityLiving victim;
-                        switch (e.world.rand.nextInt(3))
-                        {
-                            case 0:
-                                victim = new EntityCow(e.world);
-                                break;
-                            case 1:
-                                victim = new EntityPig(e.world);
-                                break;
-                            case 2:
-                                victim = new EntitySheep(e.world);
-                                break;
-                            default:
-                                victim = new EntityChicken(e.world);
-                                break;
-                        }
-                        victim.playLivingSound();
-                        victim.setLocationAndAngles((double)targetX + e.world.rand.nextDouble(), (double)targetY + e.world.rand.nextDouble(), (double)targetZ + e.world.rand.nextDouble(), e.world.rand.nextFloat(), e.world.rand.nextFloat());
-                        if (e.world.spawnEntity(victim))
-                        {
-                            MiscHelper.getWarpTag(player).setInteger("livestock", --livestock);
-                            if (livestock <= 0)
-                                MiscHelper.getWarpTag(player).removeTag("livestock");
+                        case 1:
+                            victim = new EntityVindicator(world);
                             break;
-                        }
+                        case 2:
+                            // There is a chance that some of these entities may survive, due to
+                            // landing on an adjacent block.
+                            //
+                            // Tainted sheep are capable of spreading taint, so instead, we use a
+                            // custom version of tainted sheep that cannot spread taint.
+                            victim = new EntityEvoker(world);
+                            break;
+                        default:
+                            victim = new EntityWitch(world);
+                            break;
                     }
+                    break;
+
+                case 1:
+                    victim = new EntitySquid(world);
+                    break;
+
+                case 0:
+                default:
+                    switch (world.rand.nextInt(3)) {
+                        case 0:
+                            victim = new EntityCow(world);
+                            break;
+                        case 1:
+                            victim = new EntityPig(world);
+                            break;
+                        case 2:
+                            victim = new EntitySheep(world);
+                            break;
+                        default:
+                            victim = new EntityChicken(world);
+                            break;
+                    }
+                    break;
+            }
+
+            victim.playLivingSound();
+            RandomBlockHelper.setLocation(world, victim, target);
+            if (world.spawnEntity(victim)) {
+                successful++;
+                if (successful >= eventAmount) {
+                    break;
                 }
             }
         }
+
+        return successful;
+    }
+
+    private static boolean isValid(World world, BlockCoord block) {
+        for (int i = 0; i <= 25; i++) {
+            if (!world.isAirBlock(new BlockPos(block.x, block.y + i, block.z))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

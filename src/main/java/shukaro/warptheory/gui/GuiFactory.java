@@ -1,11 +1,5 @@
 package shukaro.warptheory.gui;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.IModGuiFactory;
-
-import java.util.Set;
-
 /**
  * Created by Ark on 3/8/2015.
  */

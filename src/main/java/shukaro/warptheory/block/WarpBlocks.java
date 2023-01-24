@@ -1,6 +1,5 @@
 package shukaro.warptheory.block;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 // import shukaro.warptheory.tile.TileEntityVanish;
 
 public class WarpBlocks

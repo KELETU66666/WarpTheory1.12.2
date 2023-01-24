@@ -13,12 +13,21 @@ public class EntityDropParticleFX extends Particle {
 
     private int bobTimer;
 
-    public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
+    public EntityDropParticleFX(
+            World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue) {
 
         this(world, x, y, z, particleRed, particleGreen, particleBlue, -1);
     }
 
-    public EntityDropParticleFX(World world, double x, double y, double z, float particleRed, float particleGreen, float particleBlue, int gravityMod) {
+    public EntityDropParticleFX(
+            World world,
+            double x,
+            double y,
+            double z,
+            float particleRed,
+            float particleGreen,
+            float particleBlue,
+            int gravityMod) {
 
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
         this.motionX = this.motionY = this.motionZ = 0.0D;
@@ -66,32 +75,35 @@ public class EntityDropParticleFX extends Particle {
             this.motionZ *= 0.699999988079071D;
         }
         if (this.particleGravity > 0) {
-            Material material = this.world.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ))).getMaterial();
+            Material material = this.world
+                    .getBlockState(new BlockPos((int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)))
+                    .getMaterial();
 
             if (material.isLiquid() || material.isSolid()) {
                 double d0 = Math.floor(this.posY)
                         + 1
-                        - BlockLiquid.getLiquidHeightPercent(this.world.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY),
-                        (int)Math.floor(this.posZ))).getBlock().getMetaFromState(this.world.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY),
-                        (int)Math.floor(this.posZ)))));
+                        - BlockLiquid.getLiquidHeightPercent(this.world.getBlockState(new BlockPos(
+                        (int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ))).getBlock().getMetaFromState(this.world.getBlockState(new BlockPos(
+                        (int) Math.floor(this.posX), (int) Math.floor(this.posY), (int) Math.floor(this.posZ)))));
                 if (this.posY < d0) {
                     this.setExpired();
                 }
             }
         } else {
-            Material material = this.world.getBlockState(new BlockPos((int)Math.ceil(this.posX), (int)Math.ceil(this.posY), (int)Math.ceil(this.posZ))).getMaterial();
+            Material material = this.world
+                    .getBlockState(new BlockPos((int) Math.ceil(this.posX), (int) Math.ceil(this.posY), (int) Math.ceil(this.posZ)))
+                    .getMaterial();
 
             if (material.isLiquid() || material.isSolid()) {
-                double d0 = (int)Math.ceil(this.posY)
+                double d0 = (int) Math.ceil(this.posY)
                         + 1
-                        - BlockLiquid.getLiquidHeightPercent(this.world.getBlockState(new BlockPos((int)Math.ceil(this.posX), (int)Math.ceil(this.posY),
-                        (int)Math.ceil(this.posZ))).getBlock().getMetaFromState(this.world.getBlockState(new BlockPos((int)Math.ceil(this.posX), (int)Math.ceil(this.posY),
-                        (int)Math.ceil(this.posZ)))));
+                        - BlockLiquid.getLiquidHeightPercent(this.world.getBlockState(new BlockPos(
+                        (int) Math.ceil(this.posX), (int) Math.ceil(this.posY), (int) Math.ceil(this.posZ))).getBlock().getMetaFromState(this.world.getBlockState(new BlockPos(
+                        (int) Math.ceil(this.posX), (int) Math.ceil(this.posY), (int) Math.ceil(this.posZ)))));
                 if (this.posY > d0) {
                     this.setExpired();
                 }
             }
         }
     }
-
 }
