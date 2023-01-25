@@ -29,11 +29,11 @@ public class ClientProxy extends CommonProxy
 
     @Override
     public void Renders(){
-        if(ConfigHandler.useAmuletNewTextures)
+        if(ConfigHandler.useNewTextures)
             ModelLoader.setCustomModelResourceLocation(WarpItems.itemAmulet, 0, new ModelResourceLocation(Constants.modID + ":" + "item_cleansing_amulet_new", "inventory"));
         else
             ModelLoader.setCustomModelResourceLocation(WarpItems.itemAmulet, 0, new ModelResourceLocation(WarpItems.itemAmulet.getRegistryName(), "inventory"));
-        if(ConfigHandler.useTearNewTextures)
+        if(ConfigHandler.useNewTextures)
             ModelLoader.setCustomModelResourceLocation(WarpItems.itemCleanser, 0, new ModelResourceLocation(Constants.modID + ":" + "item_cleanser_new", "inventory"));
         else
             ModelLoader.setCustomModelResourceLocation(WarpItems.itemCleanser, 0, new ModelResourceLocation(WarpItems.itemCleanser.getRegistryName(), "inventory"));

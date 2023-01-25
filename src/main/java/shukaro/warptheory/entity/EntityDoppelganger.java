@@ -239,7 +239,7 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
         if (player.get() != null) {
             head.setItemDamage(3);
             NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setString("SkullOwner", String.valueOf(player.get().getDisplayName()));
+            nbt.setString("SkullOwner", String.valueOf(player.get().getName()));
             head.setTagCompound(nbt);
         }
 

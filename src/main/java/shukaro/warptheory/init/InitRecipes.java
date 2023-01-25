@@ -81,15 +81,15 @@ private static void initInfusionRecipes() {
             new ItemStack(WarpItems.itemCleanserMinor),
             4,
             new AspectList().add(Aspect.EXCHANGE, 60).add(Aspect.ELDRITCH, 60),
-            new ItemStack(Items.NETHER_STAR),
             new ItemStack(Items.GHAST_TEAR),
-            "gemQuartz",
-            "gemDiamond",
-            new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("thaumcraft", "salis_mundus"))),
-            new ItemStack(Items.GHAST_TEAR),
-            "gemQuartz",
-            "gemDiamond",
-            new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("thaumcraft", "salis_mundus")))));
+            new ItemStack(Items.ROTTEN_FLESH),
+            "bone",
+            "gemLapis",
+            new ItemStack(Items.REDSTONE),
+            new ItemStack(Items.ROTTEN_FLESH),
+            "bone",
+            "gemLapis",
+            new ItemStack(Items.REDSTONE)));
 
     ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(Constants.modName, "item_cleanser"), new InfusionRecipe(
             "PURE_TEAR",
@@ -97,11 +97,11 @@ private static void initInfusionRecipes() {
             6,
             new AspectList().add(Aspect.EXCHANGE, 60).add(Aspect.ELDRITCH, 60),
             new ItemStack(Items.NETHER_STAR),
-            new ItemStack(WarpItems.itemCleanserMinor),
+            new ItemStack(Items.GHAST_TEAR),
             "gemQuartz",
             "gemDiamond",
             new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("thaumcraft", "salis_mundus"))),
-            new ItemStack(WarpItems.itemCleanserMinor),
+            new ItemStack(Items.GHAST_TEAR),
             "gemQuartz",
             "gemDiamond",
             new ItemStack(ForgeRegistries.ITEMS.getValue(new ResourceLocation("thaumcraft", "salis_mundus")))));

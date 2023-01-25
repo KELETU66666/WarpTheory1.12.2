@@ -23,8 +23,7 @@ public class ConfigHandler {
     public static boolean allowMultiWarpEffects = false;
     public static boolean allowWarpEffects = false;
     public static boolean allowServerKickWarpEffects = false;
-    public static boolean useAmuletNewTextures = true;
-    public static boolean useTearNewTextures = true;
+    public static boolean useNewTextures = true;
 
     public static void init(File configFile) {
         if (config == null) {
@@ -71,6 +70,11 @@ public class ConfigHandler {
                 "general",
                 true,
                 "whether to add general warp effects. If false extra effects will only be seen when using Pure Tear");
+        useNewTextures = config.getBoolean(
+                "useNewTextures",
+                "general",
+                true,
+                "whether to use new textures. If false then use origin texture of Pure Tear and Cleansing Amulet");
         allowServerKickWarpEffects = config.getBoolean(
                 "allowServerErrorWarpEffects",
                 "general",

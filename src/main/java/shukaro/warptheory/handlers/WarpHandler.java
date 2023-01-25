@@ -152,7 +152,7 @@ public class WarpHandler
     {
         if (amount <= 0)
             return;
-        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 && ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
+        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 || ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
         {
             String name = player.getDisplayName().toString();
             int wp = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) != 0 ? ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) : 0;

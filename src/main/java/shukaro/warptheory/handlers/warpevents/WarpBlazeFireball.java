@@ -35,15 +35,16 @@ public class WarpBlazeFireball extends ITimerWarpEvent {
     public void timerTick(World world, EntityPlayer player, String timer, int timerCount) {
         if(!world.isRemote) {
             if (timer.equals(FIREBALL_TIMER) && timerCount <= 2) {
-                EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
-                EntitySmallFireball fireball = new EntitySmallFireball(world, player, enderPearl.motionX / 10.0d, enderPearl.motionY / 10.0d, enderPearl.motionZ / 10.0d);
+                EntitySmallFireball fireball = new EntitySmallFireball(world, player, player.getLookVec().x, player.getLookVec().y, player.getLookVec().z);
                 // The fireball constructor introduces some randomness.
                 // Copy over vector from an ender pearl projectile, to remove this randomness.
+                EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
                 fireball.posY += player.getEyeHeight();
                 fireball.accelerationX = enderPearl.motionX / 10.0d;
                 fireball.accelerationY = enderPearl.motionY / 10.0d;
                 fireball.accelerationZ = enderPearl.motionZ / 10.0d;
 
+                world.spawnEntity(fireball);
                 if (world.spawnEntity(fireball)) {
                     world.playSound(player, player.getPosition(), SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
                 }
@@ -54,6 +55,7 @@ public class WarpBlazeFireball extends ITimerWarpEvent {
     @Override
     @SubscribeEvent
     public void onTick(TickEvent.WorldTickEvent e) {
+        if(!e.world.isRemote)
         if (e.world.getTotalWorldTime() % 10 != 0) {
             return;
         }

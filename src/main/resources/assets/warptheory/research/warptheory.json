@@ -22,7 +22,8 @@
           ],
           "required_knowledge": [
             "OBSERVATION;BASICS;1"
-          ]
+          ],
+          "required_research": ["!sensus", "!praecantatio", "!alienis"]
         },
         {
           "text": "warptheory.research.warppaper.complete.text",
@@ -49,8 +50,8 @@
       "stages": [
         {
           "text": "warptheory.research.something.stage.1.text",
-          "required_item": [
-            "thaumcraft:triple_meat_treat"
+          "required_research": [
+            "!permutatio", "!alienis"
           ],
           "required_knowledge": [
             "OBSERVATION;BASICS;1",
@@ -68,6 +69,37 @@
       ]
     },
     {
+      "key": "IMPURE_TEAR",
+      "name": "warptheory.research.impuretear.title",
+      "category": "WARPTHEORY",
+      "icons": [
+        "warptheory:item_cleanser_minor"
+      ],"meta":["ROUND"],
+      "parents": [
+        "WARP_PAPER", "INFUSION"
+      ],
+      "location": [
+        -1,
+        1
+      ],
+      "stages": [
+        {
+          "text": "warptheory.research.impuretear.stage.1.text",
+          "required_item": ["minecraft:ghast_tear"],
+          "required_knowledge": [
+            "OBSERVATION;BASICS;2",
+            "OBSERVATION;INFUSION;2"
+          ]
+        },
+        {
+          "text": "warptheory.research.impuretear.complete.text",
+          "recipes": [
+            "warptheory:item_cleanser_minor"
+          ]
+        }
+      ]
+    },
+    {
       "key": "PURE_TEAR",
       "name": "warptheory.research.puretear.title",
       "category": "WARPTHEORY",
@@ -75,7 +107,7 @@
         "warptheory:item_cleanser"
       ],"meta":["ROUND", "HIDDEN"],
       "parents": [
-        "WARP_PAPER", "INFUSION"
+        "WARP_PAPER", "INFUSION", "BASEELDRITCH"
       ],
       "location": [
         -2,
