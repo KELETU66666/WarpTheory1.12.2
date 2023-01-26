@@ -1,7 +1,5 @@
 package shukaro.warptheory.entity;
 
-
-import com.google.common.base.Optional;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import net.minecraft.client.Minecraft;
@@ -183,7 +181,7 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
                     findPlayerWait = FIND_PLAYER_WAIT_TICKS;
 
                     UUID uuidObj = UUID.fromString(uuid);
-                    MinecraftServer server = Minecraft.getMinecraft().getIntegratedServer();
+                    MinecraftServer server = Minecraft.getMinecraft().player.getServer();
 
                     List<EntityPlayerMP> players = new ArrayList<>();
                     if (server != null)
