@@ -94,6 +94,5 @@ public class WarpTheory {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent evt) {
-        WarpHandler.tcReflect();
     }
 }

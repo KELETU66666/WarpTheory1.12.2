@@ -90,50 +90,6 @@ public class WarpHandler
         addDecayMapping(Blocks.OBSIDIAN, Blocks.COBBLESTONE);
     }
 
-    @SuppressWarnings("unchecked")
-    public static boolean tcReflect()
-    {
-        try
-        {
-            wuss = Class.forName("thaumcraft.common.config.Config").getField("wuss").getBoolean(null);
-            potionWarpWardID = Class.forName("thaumcraft.common.config.Config").getField("potionWarpWardID").getInt(null);
-        }
-        catch (Exception e)
-        {
-            WarpTheory.logger.warn("Could not reflect into thaumcraft.common.Config to get config settings");
-            e.printStackTrace();
-        }
-        try
-        {
-            Class tc = Class.forName("thaumcraft.common.Thaumcraft");
-            Object proxy = tc.getField("proxy").get(null);
-            Object pK = proxy.getClass().getField("playerKnowledge").get(proxy);
-            warpNormal = (Map<String, Integer>)pK.getClass().getDeclaredField("warpSticky").get(pK);
-            warpTemp = (Map<String, Integer>)pK.getClass().getField("warpTemp").get(pK);
-            warpPermanent = (Map<String, Integer>)pK.getClass().getField("warp").get(pK);
-        }
-        catch (Exception e)
-        {
-            WarpTheory.logger.warn("Could not reflect into thaumcraft.common.Thaumcraft to get warpNormal mappings, attempting older reflection");
-            e.printStackTrace();
-            try
-            {
-                Class tc = Class.forName("thaumcraft.common.Thaumcraft");
-                Object proxy = tc.getField("proxy").get(null);
-                Object pK = proxy.getClass().getField("playerKnowledge").get(proxy);
-                warpNormal = (Map<String, Integer>)pK.getClass().getDeclaredField("warp").get(pK);
-                warpTemp = (Map<String, Integer>)pK.getClass().getField("warpTemp").get(pK);
-            }
-            catch (Exception x)
-            {
-                WarpTheory.logger.warn("Failed to reflect into thaumcraft.common.Thaumcraft to get warpNormal mapping");
-                e.printStackTrace();
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static void purgeWarp(EntityPlayer player)
     {
         queueMultipleEvents(player, getTotalWarp(player));
@@ -152,10 +108,9 @@ public class WarpHandler
     {
         if (amount <= 0)
             return;
-        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 || ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
+        if (ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) + ThaumcraftApi.internalMethods.getActualWarp(player) != 0)
         {
-            String name = player.getDisplayName().toString();
-            int wp = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) != 0 ? ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) : 0;
+            int wp = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT);
             int wn = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL);
             int wt = ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY);
             if (amount <= wt)
@@ -192,7 +147,7 @@ public class WarpHandler
     {
         if (player == null)
             return 0;
-        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) != 0 || ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) != 0) || tcReflect())
+        if ((ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) + ThaumcraftApi.internalMethods.getActualWarp(player) != 0))
         {
             return ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.PERMANENT) + ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.NORMAL) + ThaumcraftCapabilities.getWarp(player).get(IPlayerWarp.EnumWarpType.TEMPORARY) +
                     getWarpFromGear(player);
