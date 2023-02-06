@@ -181,7 +181,7 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
                     findPlayerWait = FIND_PLAYER_WAIT_TICKS;
 
                     UUID uuidObj = UUID.fromString(uuid);
-                    MinecraftServer server = Minecraft.getMinecraft().player.getServer();
+                    MinecraftServer server = this.world.getMinecraftServer();
 
                     List<EntityPlayerMP> players = new ArrayList<>();
                     if (server != null)

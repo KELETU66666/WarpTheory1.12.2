@@ -18,7 +18,7 @@ public class WarpEventHandler {
         if (e.getEntity() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) e.getEntity();
             boolean appliable =
-                    (!player.isPotionActive(PotionWarpWard.instance) || WarpHandler.getUnavoidableCount(player) > 0)
+                    (!player.isPotionActive(PotionWarpWard.instance) && WarpHandler.getUnavoidableCount(player) > 0)
                             && !wuss
                             && !player.capabilities.isCreativeMode;
             boolean tickflag = ConfigHandler.allowWarpEffects
