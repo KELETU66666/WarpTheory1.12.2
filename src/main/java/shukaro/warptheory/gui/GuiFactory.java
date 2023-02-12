@@ -1,10 +1,12 @@
 package shukaro.warptheory.gui;
 
+import java.util.Set;
+
 /**
  * Created by Ark on 3/8/2015.
  */
-//public class GuiFactory implements IModGuiFactory {
-  //  @Override
+public class GuiFactory{
+    //  @Override
  //   public void initialize(Minecraft minecraftInstance) {}
 
  //   @Override
@@ -21,4 +23,4 @@ package shukaro.warptheory.gui;
  //   public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
   //      return null;
   //  }
-//}
+}

@@ -31,7 +31,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.nio.file.Files;
 
-@Mod(modid = Constants.modID, name = Constants.modName, version = Constants.modVersion, guiFactory = "shukaro.warptheory.gui.GuiFactory",
+@Mod(modid = Constants.modID, name = Constants.modName, version = Constants.modVersion,
         dependencies = "required-after:thaumcraft")
 public class WarpTheory {
     @SidedProxy(clientSide = "shukaro.warptheory.net.ClientProxy", serverSide = "shukaro.warptheory.net.CommonProxy")

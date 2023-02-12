@@ -8,9 +8,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import shukaro.warptheory.entity.IHealable;
 import shukaro.warptheory.entity.IHurtable;
+import thaumcraft.common.config.ModConfig;
 import thaumcraft.common.lib.potions.PotionWarpWard;
-
-import static shukaro.warptheory.handlers.WarpHandler.wuss;
 
 public class WarpEventHandler {
     @SubscribeEvent
@@ -18,9 +17,9 @@ public class WarpEventHandler {
         if (e.getEntity() instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) e.getEntity();
             boolean appliable =
-                    (!player.isPotionActive(PotionWarpWard.instance) && WarpHandler.getUnavoidableCount(player) > 0)
-                            && !wuss
-                            && !player.capabilities.isCreativeMode;
+                    (!player.isPotionActive(PotionWarpWard.instance) || WarpHandler.getUnavoidableCount(player) > 0)
+                            && !ModConfig.CONFIG_MISC.wussMode
+                            && (!player.capabilities.isCreativeMode && !player.isSpectator());
             boolean tickflag = ConfigHandler.allowWarpEffects
                     && !player.world.isRemote
                     && player.ticksExisted > 0

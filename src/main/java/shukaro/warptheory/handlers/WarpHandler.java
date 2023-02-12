@@ -21,9 +21,6 @@ import java.util.*;
 
 public class WarpHandler
 {
-    public static Map<String, Integer> warpNormal;
-    public static Map<String, Integer> warpTemp;
-    public static Map<String, Integer> warpPermanent;
     public static boolean wuss = false;
     private static HashMap<UUID, Integer> Unavoidable = new HashMap<UUID, Integer>();
     public static int potionWarpWardID = -1;
@@ -90,9 +87,9 @@ public class WarpHandler
         addDecayMapping(Blocks.OBSIDIAN, Blocks.COBBLESTONE);
     }
 
-    public static void purgeWarp(EntityPlayer player)
-    {
-        queueMultipleEvents(player, getTotalWarp(player));
+    public static void purgeWarp(EntityPlayer player) {
+        int count = queueMultipleEvents(player, getTotalWarp(player));
+        addUnavoidableCount(player, count);
         removeWarp(player, getTotalWarp(player));
     }
 
