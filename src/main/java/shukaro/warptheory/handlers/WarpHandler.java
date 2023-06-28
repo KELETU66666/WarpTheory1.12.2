@@ -133,7 +133,7 @@ public class WarpHandler
             if (ConfigHandler.allowPermWarpRemoval)
             {
                 if ((int)Math.ceil(amount / ConfigHandler.permWarpMult) <= wp)
-                    ThaumcraftApi.internalMethods.addWarpToPlayer(player, - (wp - (int)Math.ceil(amount / ConfigHandler.permWarpMult)), IPlayerWarp.EnumWarpType.PERMANENT);
+                    ThaumcraftApi.internalMethods.addWarpToPlayer(player, - (int)Math.ceil(amount / ConfigHandler.permWarpMult), IPlayerWarp.EnumWarpType.PERMANENT);
                 else
                     ThaumcraftApi.internalMethods.addWarpToPlayer(player, - wp, IPlayerWarp.EnumWarpType.PERMANENT);
             }
