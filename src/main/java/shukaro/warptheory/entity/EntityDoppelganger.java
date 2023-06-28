@@ -50,11 +50,7 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
     // This will only be populated on the client.
     protected static final Map<UUID, GameProfile> gameProfileCache = new HashMap<>();
 
-    protected int findPlayerWait;
     protected int healWait;
-
-    // This will only be set on the server.
-    protected WeakReference<EntityPlayer> player;
 
     public EntityDoppelganger(World world) {
         super(world);
@@ -63,18 +59,15 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
         tasks.addTask(3, new EntityAIWander(this, 0.8D));
         tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         tasks.addTask(5, new EntityAILookIdle(this));
-        targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false, true));
+        targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false, true));
 
-        findPlayerWait = 0;
         healWait = HEAL_WAIT_TICKS;
-        player = new WeakReference<>(null);
     }
 
     /**
      * Should be called once shortly after construction, to initialize things like HP and name.
      */
     public void initialize(EntityPlayer player) {
-        this.player = new WeakReference<>(player);
         this.getDataManager().set(UUID_DATA_WATCHER_ID, player.getUniqueID().toString());
 
         String name =
@@ -87,7 +80,6 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
 
     @SideOnly(Side.CLIENT)
     @Nullable
-    @SuppressWarnings("unchecked")
     public ResourceLocation getPlayerSkin() {
         String uuidString = getDataManager().get(UUID_DATA_WATCHER_ID);
         if (uuidString.isEmpty()) {
@@ -127,8 +119,13 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
             return;
         }
 
+        Optional<EntityPlayerMP> player = findPlayer();
+        if (!player.isPresent()) {
+            return;
+        }
+
         EntityPlayer entityPlayer = player.get();
-        if (entityPlayer != null && entityPlayer.getHealth() < entityPlayer.getMaxHealth()) {
+        if (entityPlayer.getHealth() < entityPlayer.getMaxHealth()) {
             entityPlayer.heal(amount);
             ChatHelper.sendToPlayer(
                     entityPlayer,
@@ -140,25 +137,29 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
 
     @Override
     public void onHurt(LivingHurtEvent e) {
-        EntityPlayer entityPlayer = player.get();
-        if (entityPlayer != null) {
-            DamageSource damageSource = DamageSource.causeIndirectMagicDamage(this, this);
-            float damage = Math.min(e.getAmount(), getHealth());
-            entityPlayer.attackEntityFrom(damageSource, damage);
+        Optional<EntityPlayerMP> player = findPlayer();
+        if (!player.isPresent()) {
+            return;
+        }
 
-            if (getHealth() > e.getAmount()) {
-                ChatHelper.sendToPlayer(
-                        entityPlayer,
-                        FormatCodes.Purple.code
-                                + FormatCodes.Italic.code
-                                + I18n.translateToLocal("chat.warptheory.doppelganger.hurt"));
-            } else {
-                ChatHelper.sendToPlayer(
-                        entityPlayer,
-                        FormatCodes.Purple.code
-                                + FormatCodes.Italic.code
-                                + I18n.translateToLocal("chat.warptheory.doppelganger.die"));
-            }
+
+        EntityPlayer entityPlayer = player.get();
+        DamageSource damageSource = DamageSource.causeIndirectMagicDamage(this, this);
+        float damage = Math.min(e.getAmount(), getHealth());
+        entityPlayer.attackEntityFrom(damageSource, damage);
+
+        if (getHealth() > e.getAmount()) {
+            ChatHelper.sendToPlayer(
+                    entityPlayer,
+                    FormatCodes.Purple.code
+                            + FormatCodes.Italic.code
+                            + I18n.translateToLocal("chat.warptheory.doppelganger.hurt"));
+        } else {
+            ChatHelper.sendToPlayer(
+                    entityPlayer,
+                    FormatCodes.Purple.code
+                            + FormatCodes.Italic.code
+                            + I18n.translateToLocal("chat.warptheory.doppelganger.die"));
         }
     }
 
@@ -171,30 +172,6 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
     @Override
     public void onUpdate() {
         super.onUpdate();
-
-        if (!world.isRemote) {
-            String uuid = getDataManager().get(UUID_DATA_WATCHER_ID);
-            if ((player.get() == null || player.get().isDead) && !uuid.isEmpty()) {
-                if (findPlayerWait > 0) {
-                    findPlayerWait--;
-                } else {
-                    findPlayerWait = FIND_PLAYER_WAIT_TICKS;
-
-                    UUID uuidObj = UUID.fromString(uuid);
-                    MinecraftServer server = this.world.getMinecraftServer();
-
-                    List<EntityPlayerMP> players = new ArrayList<>();
-                    if (server != null)
-                        players.addAll(server.getPlayerList().getPlayers());
-                    for (EntityPlayerMP entityPlayer : players) {
-                        if (entityPlayer.getUniqueID().equals(uuidObj)) {
-                            player = new WeakReference<>(entityPlayer);
-                            return;
-                        }
-                    }
-                }
-            }
-        }
 
         if (getHealth() < getMaxHealth()) {
             if (healWait > 0) {
@@ -233,13 +210,16 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
 
     @Override
     protected void dropFewItems(boolean wasRecentlyHit, int par1) {
-        ItemStack head = new ItemStack(Items.SKULL, 1, 2);
-        if (player.get() != null) {
-            head.setItemDamage(3);
-            NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setString("SkullOwner", String.valueOf(player.get().getName()));
-            head.setTagCompound(nbt);
+        Optional<EntityPlayerMP> player = findPlayer();
+        if (!player.isPresent()) {
+            return;
         }
+
+        ItemStack head = new ItemStack(Items.SKULL, 1, 2);
+        head.setItemDamage(3);
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setString("SkullOwner", player.get().getName());
+        head.setTagCompound(nbt);
 
         entityDropItem(head, 0.0f);
     }
@@ -257,7 +237,32 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
         if (nbt.hasKey(UUID_NBT_TAG)) {
-            getDataManager().set(UUID_DATA_WATCHER_ID, player.get().getUniqueID().toString());
+            getDataManager().set(UUID_DATA_WATCHER_ID, nbt.getString(UUID_NBT_TAG));
         }
+    }
+
+    private Optional<EntityPlayerMP> findPlayer() {
+        if (world.isRemote) {
+            return Optional.empty();
+        }
+
+        if (world.getMinecraftServer().getPlayerList() == null) {
+            return Optional.empty();
+        }
+
+        String uuidString = getDataManager().get(UUID_DATA_WATCHER_ID);
+        if (uuidString.isEmpty()) {
+            return Optional.empty();
+        }
+        UUID uuid = UUID.fromString(uuidString);
+
+        @SuppressWarnings("unchecked")
+        List<EntityPlayerMP> players = this.world.getMinecraftServer().getPlayerList().getPlayers();
+        for (EntityPlayerMP entityPlayer : players) {
+            if (entityPlayer.getUniqueID().equals(uuid)) {
+                return Optional.of(entityPlayer);
+            }
+        }
+        return Optional.empty();
     }
 }
