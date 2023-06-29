@@ -19,7 +19,7 @@ public class WarpCoin extends IWarpEvent {
         if (world.isRemote) return true;
 
         player.entityDropItem(new ItemStack(Items.GOLD_NUGGET), 0.0f);
-        world.playSound(player, player.getPosition(), SoundsTC.coins, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        world.playSound(null, player.getPosition(), SoundsTC.coins, SoundCategory.PLAYERS, 1.0F, 1.0F);
         sendChatMessage(player);
         return true;
     }

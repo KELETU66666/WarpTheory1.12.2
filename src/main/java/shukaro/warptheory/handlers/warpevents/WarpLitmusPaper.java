@@ -34,7 +34,7 @@ public class WarpLitmusPaper extends ITimerWarpEvent {
     @Override
     public int triggerEvent(int eventAmount, World world, EntityPlayer player) {
         player.dropItem(WarpItems.itemPaper, 1 + world.rand.nextInt(4));
-        world.playSound(player, player.getPosition(), SoundsTC.zap, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        world.playSound(null, player.getPosition(), SoundsTC.zap, SoundCategory.PLAYERS, 1.0F, 1.0F);
         super.sendChatMessage(player);
 
         // Don't allow this event to happen again for eight hours.

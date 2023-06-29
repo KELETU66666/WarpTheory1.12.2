@@ -41,7 +41,7 @@ public class WarpEars extends IWarpEvent
     public void onMessageReceived(ClientChatReceivedEvent e)
     {
         EntityPlayer player = WarpTheory.proxy.getPlayer();
-        if (player == null || ChatHelper.getUsername(e.getMessage()).length() == 0 || player.getCommandSenderEntity().equals(ChatHelper.getUsername(e.getMessage())))
+        if (player == null || ChatHelper.getUsername(e.getMessage()).length() == 0 || player.getCommandSenderEntity().getName().equals(ChatHelper.getUsername(e.getMessage())))
             return;
 
         // Warp ears

@@ -28,7 +28,7 @@ public class WarpPumpkin extends IWarpEvent {
         // But check again just to be safe (in case the code changes).
         if (player.inventory.armorInventory.get(3) == ItemStack.EMPTY) {
             player.inventory.armorInventory.set(3, new ItemStack(Blocks.PUMPKIN));
-            world.playSound(player, player.getPosition(), SoundEvents.BLOCK_WOOD_HIT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            world.playSound(null, player.getPosition(), SoundEvents.BLOCK_WOOD_HIT, SoundCategory.PLAYERS, 1.0F, 1.0F);
             sendChatMessage(player);
         }
 

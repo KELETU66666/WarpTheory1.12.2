@@ -26,7 +26,7 @@ public class WarpLayEggs extends ITimerWarpEvent {
 
     @Override
     public int triggerEvent(int eventAmount, World world, EntityPlayer player) {
-        world.playSound(player, player.getPosition(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        world.playSound(null, player.getPosition(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.PLAYERS, 1.0F, 1.0F);
         player.dropItem(Items.EGG, 1);
 
         setTimer(player, COOLDOWN_TIMER, world.rand.nextInt(5) + 1);

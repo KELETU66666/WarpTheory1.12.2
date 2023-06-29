@@ -16,8 +16,10 @@ public class WarpEnderPearl extends IWarpEvent {
     public boolean doEvent(World world, EntityPlayer player) {
         if (world.isRemote) return false;
 
-        if (world.spawnEntity(new EntityEnderPearl(world, player))) {
-            world.playSound(player, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_SCREAM, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
+        enderPearl.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
+        if (world.spawnEntity(enderPearl)) {
+            world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ENDERMEN_SCREAM, SoundCategory.PLAYERS, 1.0F, 1.0F);
             sendChatMessage(player);
         }
         return true;

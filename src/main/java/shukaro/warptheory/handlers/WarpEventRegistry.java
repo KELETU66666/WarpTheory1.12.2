@@ -55,7 +55,8 @@ public enum WarpEventRegistry {
     LIVESTOCK_RAIN(WarpLivestockRain::new, "LiveStockRain", "livestock rain", true, 70, false, false),
     WIND(WarpWind::new, "Wind", "wind", true, 85, false, false),
     CHESTS(WarpChests::new, "Chest", "chest scramble", false, 175, true, false),
-    BLOOD(WarpBlood::new, "Blood", "blood", true, 35, false, false),
+    //TODO fix this
+    //BLOOD(WarpBlood::new, "Blood", "blood", true, 35, false, false),
     ACCELERATION(WarpAcceleration::new, "Acceleration", "acceleration", true, 140, true, false),
     LIGHTNING(WarpLightning::new, "Lightning", "lightning", true, 120, false, false),
     FALL(WarpFall::new, "WorldHole", "world hole", false, 150, true, true),
@@ -79,7 +80,7 @@ public enum WarpEventRegistry {
             false),
 
     // GTNH warp effects
-    //BLAZE_FIREBALL(WarpBlazeFireball::new, "BlazeFireball", "blaze fireball", true, 95, false, false),
+    BLAZE_FIREBALL(WarpBlazeFireball::new, "BlazeFireball", "blaze fireball", true, 95, false, false),
     COIN(WarpCoin::new, "Coin", "coin", true, 15, false, false),
     COUNTDOWN_BOMB(WarpCountdownBomb::new, "CountdownBomb", "countdown bomb", true, 160, true, false),
     DOPPELGANGER(WarpDoppelganger::new, "Doppelganger", "doppelganger", true, 75, false, false),

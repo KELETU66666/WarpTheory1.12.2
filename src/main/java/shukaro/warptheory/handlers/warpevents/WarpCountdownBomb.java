@@ -55,7 +55,7 @@ public class WarpCountdownBomb extends ITimerWarpEvent {
                             particleSpeed);
 
             if (timerCount > 0) {
-                world.playSound(player, player.getPosition(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                world.playSound(null, player.getPosition(), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.PLAYERS, 1.0F, 1.0F);
             } else {
                 world.createExplosion(null, player.posX, player.posY, player.posZ, 3.0F, true);
             }

@@ -25,7 +25,7 @@ public class WarpBlazeFireball extends ITimerWarpEvent {
 
     @Override
     public int triggerEvent(int eventAmount, World world, EntityPlayer player) {
-        world.playSound(player, player.getPosition(), SoundEvents.ENTITY_BLAZE_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        world.playSound(null, player.getPosition(), SoundEvents.ENTITY_BLAZE_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
         super.sendChatMessage(player);
         setTimer(player, FIREBALL_TIMER, 7);
         return 1;
@@ -35,18 +35,19 @@ public class WarpBlazeFireball extends ITimerWarpEvent {
     public void timerTick(World world, EntityPlayer player, String timer, int timerCount) {
         if(!world.isRemote) {
             if (timer.equals(FIREBALL_TIMER) && timerCount <= 2) {
-                EntitySmallFireball fireball = new EntitySmallFireball(world, player, player.getLookVec().x, player.getLookVec().y, player.getLookVec().z);
+                EntitySmallFireball fireball = new EntitySmallFireball(world, player, 0.0f, 0.0f, 0.0f);
                 // The fireball constructor introduces some randomness.
                 // Copy over vector from an ender pearl projectile, to remove this randomness.
                 EntityEnderPearl enderPearl = new EntityEnderPearl(world, player);
+                enderPearl.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 1.0F);
                 fireball.posY += player.getEyeHeight();
-                fireball.accelerationX = enderPearl.motionX / 10.0d;
-                fireball.accelerationY = enderPearl.motionY / 10.0d;
-                fireball.accelerationZ = enderPearl.motionZ / 10.0d;
+                fireball.motionX  = enderPearl.motionX;
+                fireball.motionY = enderPearl.motionY;
+                fireball.motionZ = enderPearl.motionZ;
 
                 world.spawnEntity(fireball);
                 if (world.spawnEntity(fireball)) {
-                    world.playSound(player, player.getPosition(), SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                    world.playSound(null, player.getPosition(), SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F);
                 }
             }
         }

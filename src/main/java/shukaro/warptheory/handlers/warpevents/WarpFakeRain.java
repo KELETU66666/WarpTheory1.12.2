@@ -39,7 +39,7 @@ public class WarpFakeRain extends IMultiWarpEvent {
             PacketDispatcher.sendFakeRainEvent(player, -1);
         }
 
-        world.playSound(player,player.getPosition(), SoundEvents.WEATHER_RAIN, SoundCategory.AMBIENT, 0.5F, 1.0F);
+        world.playSound(null,player.getPosition(), SoundEvents.WEATHER_RAIN, SoundCategory.AMBIENT, 0.5F, 1.0F);
         return 1;
     }
 

@@ -38,7 +38,7 @@ public class WarpInventoryScramble extends IWarpEvent {
 
         //TODO: What's the fuck of this function?
         //player.inventory.inventoryChanged = true;
-        world.playSound(player, player.getPosition(), SoundEvents.BLOCK_LAVA_POP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+        world.playSound(null, player.getPosition(), SoundEvents.BLOCK_LAVA_POP, SoundCategory.PLAYERS, 1.0F, 1.0F);
         // No message for this one.
 
         return true;

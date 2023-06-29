@@ -29,7 +29,7 @@ public class WarpObsidian extends IWarpEvent {
         BlockCoord playerHead = new BlockCoord(player).offset(1);
         if (playerHead.isAir(world)) {
             world.setBlockState(new BlockPos(playerHead.x, playerHead.y, playerHead.z), Blocks.OBSIDIAN.getDefaultState());
-            world.playSound(player, player.getPosition(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            world.playSound(null, player.getPosition(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.PLAYERS, 1.0F, 1.0F);
             sendChatMessage(player);
         }
 
