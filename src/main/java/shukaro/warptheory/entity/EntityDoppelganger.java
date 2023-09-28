@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -26,11 +25,11 @@ import net.minecraftforge.event.entity.living.LivingHealEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import shukaro.warptheory.handlers.ConfigHandler;
 import shukaro.warptheory.util.ChatHelper;
 import shukaro.warptheory.util.FormatCodes;
 
 import javax.annotation.Nullable;
-import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class EntityDoppelganger extends EntityCreature implements IHealable, IHurtable {
@@ -146,7 +145,8 @@ public class EntityDoppelganger extends EntityCreature implements IHealable, IHu
         EntityPlayer entityPlayer = player.get();
         DamageSource damageSource = DamageSource.causeIndirectMagicDamage(this, this);
         float damage = Math.min(e.getAmount(), getHealth());
-        entityPlayer.attackEntityFrom(damageSource, damage);
+        if(ConfigHandler.enableDoppelgangerReflectDamage)
+            entityPlayer.attackEntityFrom(damageSource, damage);
 
         if (getHealth() > e.getAmount()) {
             ChatHelper.sendToPlayer(

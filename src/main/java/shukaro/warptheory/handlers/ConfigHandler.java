@@ -24,6 +24,7 @@ public class ConfigHandler {
     public static boolean allowWarpEffects = false;
     public static boolean allowServerKickWarpEffects = false;
     public static boolean useNewTextures = true;
+    public static boolean enableDoppelgangerReflectDamage = true;
 
     public static void init(File configFile) {
         if (config == null) {
@@ -80,6 +81,11 @@ public class ConfigHandler {
                 "general",
                 false,
                 "whether to allow warp effects known to cause errors on servers");
+        enableDoppelgangerReflectDamage = config.getBoolean(
+                "enableDoppelgangerReflectDamage",
+                "general",
+                true,
+                "whether to allow doppelganger reflect damage (disable to avoid cause bugs with other mods!)");
 
         Arrays.stream(WarpEventRegistry.values()).forEach(warpEvent -> warpEvent.loadConfig(config));
 
