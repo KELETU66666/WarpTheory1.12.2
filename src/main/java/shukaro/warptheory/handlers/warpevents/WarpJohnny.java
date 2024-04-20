@@ -3,11 +3,8 @@ package shukaro.warptheory.handlers.warpevents;
 
 import net.minecraft.entity.monster.EntityVindicator;
 import net.minecraft.entity.player.EntityPlayer;
-import static net.minecraft.init.Blocks.PUMPKIN;
-import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
@@ -26,7 +23,7 @@ public class WarpJohnny extends IMultiWarpEvent {
         int successful = 0;
 
         for (int i = 0; i < 6; i++) {
-            BlockCoord target = RandomBlockHelper.randomDoubleAirBlock(world, player, 4);
+            BlockCoord target = RandomBlockHelper.randomDoubleAirBlock(world, player, 16);
             if (target == null) {
                 continue;
             }
@@ -34,10 +31,6 @@ public class WarpJohnny extends IMultiWarpEvent {
             EntityVindicator johnny = new EntityVindicator(world);
             switch (eventLevel) {
                 case 2:
-                    ItemStack stack = new ItemStack(Items.DIAMOND_AXE);
-                    stack.addEnchantment(Enchantments.SHARPNESS, world.rand.nextInt(2) + 3);
-                    johnny.setHeldItem(EnumHand.MAIN_HAND, stack);
-                    break;
                 case 1:
                     johnny.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.DIAMOND_AXE));
                     break;
@@ -50,7 +43,6 @@ public class WarpJohnny extends IMultiWarpEvent {
             if (eventLevel == 2) {
                 johnny.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 60 * 20, 2));
                 johnny.addPotionEffect(new PotionEffect(MobEffects.SPEED, 60 * 20, 2));
-                johnny.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(PUMPKIN));
             }
 
             try {
