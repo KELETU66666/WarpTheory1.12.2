@@ -15,7 +15,7 @@ public class ChatHelper
 
     public static void sendToPlayer(EntityPlayer player, String message)
     {
-        player.sendMessage(new TextComponentString(message));
+        player.sendStatusMessage(new TextComponentString(message), true);
     }
 
     public static String getUsername(ITextComponent message)

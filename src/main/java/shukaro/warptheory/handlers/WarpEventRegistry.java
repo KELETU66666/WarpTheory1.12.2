@@ -51,6 +51,7 @@ public enum WarpEventRegistry {
     EARS(WarpEars::new, "Deaf", "ears (unable to read messages)", false, 75, false, false),
     SWAMP(WarpSwamp::new, "Swamp", "swamp (random trees)", true, 190, true, false),
     TONGUE(WarpTongue::new, "Mute", "tongue (unable to send messages)", false, 75, false, false),
+    NAME(WarpName::new, "Name", "change an item name", true, 60, false, false),
     FRIEND(WarpFriend::new, "Friend", "friendly creeper", true, 40, false, false),
     LIVESTOCK_RAIN(WarpLivestockRain::new, "LiveStockRain", "livestock rain", true, 70, false, false),
     WIND(WarpWind::new, "Wind", "wind", true, 85, false, false),
@@ -100,6 +101,8 @@ public enum WarpEventRegistry {
     OBSIDIAN(WarpObsidian::new, "Obsidian", "obsidian", true, 110, true, false),
     PUMPKIN(WarpPumpkin::new, "Pumpkin", "pumpkin", true, 15, false, false),
     SNOW(WarpSnow::new, "Snow", "snow", true, 175, true, false),
+    JOHNNY(WarpJohnny::new, "Johnny", "johnny", true, 120, false, false),
+    KILLER_BUNNY(WarpKillerRabbits::new, "KillerBunny", "bunny", true, 75, false, false),
     WITHER_POTION(
             warp -> new WarpBuff(
                     "witherpotion",
